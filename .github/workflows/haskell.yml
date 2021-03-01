@@ -40,7 +40,7 @@ jobs:
           path: ~/.stack
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
       - run: stack install hlint
-      - run: hlint .
+      - run: ~/.local/bin/hlint .
   stylish-haskell:
     name: Stylish Haskell
     runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
       - run: stack install stylish-haskell
       - run: |
-          stylish-haskell -i `find app src -name "*.hs"`
+          ~/.local/bin/stylish-haskell -i `find app src -name "*.hs"`
           if [ -z "$(git status --porcelain)" ]; then
               echo "No style errors detected."
           else
