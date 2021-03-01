@@ -2,7 +2,7 @@ on: [push]
 name: build
 jobs:
   runhaskell:
-    name: Hello World
+    name: Build + Test
     runs-on: ubuntu-latest # or macOS-latest, or windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,5 +12,12 @@ jobs:
           # cabal-version: 'latest'. Omitted, but defaults to 'latest'
           enable-stack: true
           stack-version: 'latest'
+      - name: Cache
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-stack
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
       - run: stack build
       - run: stack test
