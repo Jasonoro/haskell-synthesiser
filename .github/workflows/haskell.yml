@@ -21,3 +21,52 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
       - run: stack build
       - run: stack test
+  hlint:
+    name: Hlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: haskell/actions/setup@v1
+        with:
+          ghc-version: '8.8.3' # Exact version of ghc to use
+          # cabal-version: 'latest'. Omitted, but defaults to 'latest'
+          enable-stack: true
+          stack-version: 'latest'
+      - name: Cache
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-hlint
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
+      - run: stack install hlint
+      - run: hlint .
+  stylish-haskell:
+    name: Stylish Haskell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: haskell/actions/setup@v1
+        with:
+          ghc-version: '8.8.3' # Exact version of ghc to use
+          # cabal-version: 'latest'. Omitted, but defaults to 'latest'
+          enable-stack: true
+          stack-version: 'latest'
+      - name: Cache
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-stylish-haskell
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
+      - run: stack install stylish-haskell
+      - run: |
+          stylish-haskell -i `find app src -name "*.hs"`
+          if [ -z "$(git status --porcelain)" ]; then
+              echo "No style errors detected."
+          else
+              echo "Style errors detected:"
+              git diff
+              exit 1
+          fi
+                                                                          fi
