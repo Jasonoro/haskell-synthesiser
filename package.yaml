@@ -1,0 +1,48 @@
+name:                haskell-synthesizer
+version:             0.1.0.0
+github:              "Jasonoro/haskell-synthesizer"
+license:             BSD3
+author:              "Jason van den Hurk, Jort van Gorkum, Vince van Noort"
+maintainer:          "jasonhurk [at] gmail.com"
+copyright:           "2021 Jason van den Hurk, Jort van Gorkum, Vince van Noort"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/Jasonoro/haskell-synthesizer#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  haskell-synthesizer-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-synthesizer
+
+tests:
+  haskell-synthesizer-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-synthesizer
