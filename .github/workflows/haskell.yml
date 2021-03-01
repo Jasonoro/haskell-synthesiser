@@ -38,7 +38,7 @@ jobs:
           cache-name: cache-hlint
         with:
           path: ~/.stack
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
       - run: stack install hlint
       - run: ~/.local/bin/hlint .
   stylish-haskell:
@@ -58,7 +58,7 @@ jobs:
           cache-name: cache-stylish-haskell
         with:
           path: ~/.stack
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
       - run: stack install stylish-haskell
       - run: |
           ~/.local/bin/stylish-haskell -i `find app src -name "*.hs"`
@@ -69,4 +69,3 @@ jobs:
               git diff
               exit 1
           fi
-                                                                          fi
