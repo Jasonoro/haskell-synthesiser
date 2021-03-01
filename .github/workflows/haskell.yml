@@ -18,6 +18,6 @@ jobs:
           cache-name: cache-stack
         with:
           path: ~/.stack
-          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
       - run: stack build
       - run: stack test
