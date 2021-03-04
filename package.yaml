@@ -21,6 +21,8 @@ description:         Please see the README on GitHub at <https://github.com/Jaso
 
 dependencies:
 - base >= 4.7 && < 5
+- wave
+- bytestring
 
 library:
   source-dirs: src
@@ -34,6 +36,8 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
+    - wave
+    - bytestring
     - haskell-synthesizer
 
 tests:
