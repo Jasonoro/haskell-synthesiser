@@ -23,7 +23,11 @@ dependencies:
 - base >= 4.7 && < 5
 - wave
 - bytestring
+<<<<<<< HEAD
 - directory
+=======
+- containers
+>>>>>>> Added modules with functions and default values
 
 library:
   source-dirs: src
