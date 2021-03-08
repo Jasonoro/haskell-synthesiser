@@ -1,8 +1,5 @@
 module Synthesizer.Structure where
 
-import Data.Int
-
-
 newtype SynSound = SynSound {
   channels :: [Channel]
 }
