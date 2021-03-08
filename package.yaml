@@ -37,9 +37,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - wave
-    - bytestring
-    - haskell-synthesizer
+      - haskell-synthesizer
 
 tests:
   haskell-synthesizer-test:

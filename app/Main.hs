@@ -1,34 +1,6 @@
 module Main where
 
-import           Data.Int
-import           Encoders.Wav
-import           Lib
-
-import qualified Codec.Audio.Wave        as W
-import qualified Data.ByteString         as B
-import qualified Data.ByteString.Builder as B
-
-type Sample = Int16
-
-amplitude :: Num a => a
-amplitude = 32767
-
-samplingRate :: Num hz => hz
-samplingRate = 11025
-
-msToSamples :: Int -> Int
-msToSamples ms = (ms * samplingRate) `div` 1000
-
-note :: Double -> Int -> [Sample]
-note hz ms = take num $ round . (amplitude *) . sin <$> ts
-    where
-        num = msToSamples ms
-        dt = hz * 2 * pi / samplingRate
-        ts = [0,dt..]
-
-silence :: Int -> [Sample]
-silence ms = replicate num 0
-    where num = msToSamples ms
+import Synthesizer.Encoders.Wav
 
 a5 = 880
 b5 = 987.77
@@ -79,22 +51,6 @@ highPrioritySignal = cycle $ concat
     , note f5 200
     , silence 5000
     ]
-
-saveSignal :: FilePath -> [Sample] -> IO ()
-saveSignal filename samples = do
-    let numSamples = length samples
-    let wave = W.Wave
-            { W.waveFileFormat = W.WaveVanilla
-            , W.waveSampleRate = samplingRate
-            , W.waveSampleFormat = W.SampleFormatPcmInt 16
-            , W.waveChannelMask = W.speakerMono
-            , W.waveDataOffset = 0
-            , W.waveDataSize = fromIntegral $ numSamples * 2
-            , W.waveSamplesTotal = fromIntegral numSamples
-            , W.waveOtherChunks = []
-            }
-    let wavfile = filename <> ".wav"
-    writeWaveFile wavfile wave $ \handle -> B.hPutBuilder handle (mconcat $ B.int16LE <$> samples)
 
 main :: IO ()
 main = do
