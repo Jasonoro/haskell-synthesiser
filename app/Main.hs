@@ -1,6 +1,7 @@
 module Main where
 
 import           Data.Int
+import           Encoders.Wav
 import           Lib
 
 import qualified Codec.Audio.Wave        as W
@@ -93,7 +94,7 @@ saveSignal filename samples = do
             , W.waveOtherChunks = []
             }
     let wavfile = filename <> ".wav"
-    W.writeWaveFile wavfile wave $ \handle -> B.hPutBuilder handle (mconcat $ B.int16LE <$> samples)
+    writeWaveFile wavfile wave $ \handle -> B.hPutBuilder handle (mconcat $ B.int16LE <$> samples)
 
 main :: IO ()
 main = do
