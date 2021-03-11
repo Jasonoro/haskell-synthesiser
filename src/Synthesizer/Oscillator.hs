@@ -1,4 +1,4 @@
-module Oscillator where
+module Synthesizer.Oscillator where
 
 import Data.Fixed
 import Numeric

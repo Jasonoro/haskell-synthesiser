@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Synthesizer
+      Synthesizer.Oscillator
       Synthesizer.Encoders.Wav
       Synthesizer.Structure
       Notes
