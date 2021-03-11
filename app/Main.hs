@@ -11,7 +11,8 @@ import Notes.Default
 mediumPrioritySignal :: SynSound
 mediumPrioritySignal = SynSound [
         Channel [
-            SoundEvent 0 1000 (map (round . (*32767)) $ sineOscillator 1)
+            SoundEvent 0   1 (map (round . (* 32767)) . sineOscillator 600),
+            SoundEvent 0.5 1 (map (round . (* 32767)) . sineOscillator 900)
         ]
     ]
 

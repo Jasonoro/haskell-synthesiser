@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 699df5aaca1c6523a5dcb57ed6bdf3feedfb91426bb2959a7ad4df435cfb1511
+-- hash: f6d14ad1baf6573251e55db5325410c3ed663c605f7aee17388219c3b5ed7f12
 
 name:           haskell-synthesizer
 version:        0.1.0.0
@@ -27,12 +27,12 @@ source-repository head
 
 library
   exposed-modules:
-      Synthesizer
-      Synthesizer.Oscillator
-      Synthesizer.Encoders.Wav
-      Synthesizer.Structure
       Notes
       Notes.Default
+      Synthesizer
+      Synthesizer.Encoders.Wav
+      Synthesizer.Oscillator
+      Synthesizer.Structure
   other-modules:
       Paths_haskell_synthesizer
   hs-source-dirs:
@@ -40,8 +40,8 @@ library
   build-depends:
       base >=4.7 && <5
     , bytestring
-    , directory
     , containers
+    , directory
     , wave
   default-language: Haskell2010
 
@@ -55,8 +55,8 @@ executable haskell-synthesizer-exe
   build-depends:
       base >=4.7 && <5
     , bytestring
-    , directory
     , containers
+    , directory
     , haskell-synthesizer
     , wave
   default-language: Haskell2010
@@ -72,8 +72,8 @@ test-suite haskell-synthesizer-test
   build-depends:
       base >=4.7 && <5
     , bytestring
-    , directory
     , containers
+    , directory
     , haskell-synthesizer
     , wave
   default-language: Haskell2010
