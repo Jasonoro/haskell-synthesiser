@@ -1,31 +1,16 @@
 module Synthesizer.Encoders.Wav where
 
 import qualified Codec.Audio.Wave        as W
+import           Control.Exception
 import           Control.Monad.IO.Class
 import qualified Data.ByteString         as B
 import qualified Data.ByteString.Builder as B
 import           Data.Int
+import           Prelude                 hiding (catch)
+import           Synthesizer.Structure
 import           System.Directory
 import           System.IO
-
-type Sample = Int16
-
-amplitude :: Num a => a
-amplitude = 32767
-
-msToSamples :: Int -> Int
-msToSamples ms = (ms * samplingRate) `div` 1000
-
-note :: Double -> Int -> [Sample]
-note hz ms = take num $ round . (amplitude *) . sin <$> ts
-  where
-    num = msToSamples ms
-    dt = hz * 2 * pi / samplingRate
-    ts = [0,dt..]
-
-silence :: Int -> [Sample]
-silence ms = replicate num 0
-  where num = msToSamples ms
+import           System.IO.Error         hiding (catch)
 
 samplingRate :: Num hz => hz
 samplingRate = 11025
@@ -35,11 +20,14 @@ writeWaveFile :: FilePath            -- ^ Where to save the file
               -> (Handle -> IO ())   -- ^ Callback that will be used to write WAVE data
               -> IO ()
 writeWaveFile path wave writeData = do
-  removeFile path
+  removeFile path `catch` ignoreDoesNotExists
   W.writeWaveFile path wave writeData
+  where ignoreDoesNotExists e | isDoesNotExistError e = return ()
+                              | otherwise = throwIO e
 
-saveSignal :: FilePath -> [Sample] -> IO ()
-saveSignal filename samples = do
+saveSignal :: FilePath -> SynSound -> IO ()
+saveSignal filename sound = do
+  let samples = soundToSamples sound samplingRate
   let numSamples = length samples
   let wave = W.Wave {
       W.waveFileFormat = W.WaveVanilla
@@ -50,6 +38,11 @@ saveSignal filename samples = do
       , W.waveDataSize = fromIntegral $ numSamples * 2
       , W.waveSamplesTotal = fromIntegral numSamples
       , W.waveOtherChunks = []
-    }
+  }
   let wavfile = filename <> ".wav"
-  writeWaveFile wavfile wave $ \handle -> B.hPutBuilder handle (mconcat $ B.int16LE <$> samples)
+  writeWaveFile wavfile wave $ \handle -> B.hPutBuilder handle (mconcat $ B.int16LE <$> map sampleToI16 samples)
+
+sampleToI16 :: Sample -> Int16
+sampleToI16 s | s > 32767 = 32767
+              | s < -32768 = -32768
+              | otherwise = fromIntegral s
