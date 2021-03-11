@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f6d14ad1baf6573251e55db5325410c3ed663c605f7aee17388219c3b5ed7f12
+-- hash: b28678d267800ad70498463ec2f4e815ea10c2cfae7aa33414ec39e48f707804
 
 name:           haskell-synthesizer
 version:        0.1.0.0
@@ -31,6 +31,7 @@ library
       Notes.Default
       Synthesizer
       Synthesizer.Encoders.Wav
+      Synthesizer.Modifiers
       Synthesizer.Oscillator
       Synthesizer.Structure
   other-modules:
