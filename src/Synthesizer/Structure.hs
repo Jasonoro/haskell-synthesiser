@@ -52,12 +52,11 @@ soundToSamples sound rate = soundToSamples' convertedEvents [] rate 0
 
 soundToSamples' :: [SoundEventCached] -> [SoundEventCached] -> SamplingRate -> Int -> [Sample]
 soundToSamples' []      []     _    _            = []
-soundToSamples' samToDo samCur rate sampleNumber = samplesCurrentEvents : soundToSamples' updatedToDo updatedCurrent rate (sampleNumber + 1)
+soundToSamples' samToDo samCur rate sampleNumber = samplesCurrentEvents : soundToSamples' updatedToDo updatedCurrent' rate (sampleNumber + 1)
   where currentTime = fromIntegral sampleNumber / fromIntegral rate
         (updatedToDo, updatedCurrent) = mergeTodoAndCurrent (samToDo, samCur) currentTime
-        samplesCurrentEvents = foldr' (\e t -> t + samplesCached e !! (sampleNumber - sampleNumberStart (event e))) 0 updatedCurrent
-        sampleNumberStart :: SoundEvent -> Int
-        sampleNumberStart e = floor (startTime e) * rate
+        samplesCurrentEvents = foldr' (\e t -> t + head (samplesCached e)) 0 updatedCurrent
+        updatedCurrent' = map (\e -> e {samplesCached = tail (samplesCached e)}) updatedCurrent
 
 
 mergeTodoAndCurrent :: ([SoundEventCached], [SoundEventCached]) -> Time -> ([SoundEventCached], [SoundEventCached])
