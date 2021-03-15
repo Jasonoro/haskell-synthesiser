@@ -1,4 +1,19 @@
-module Synthesizer.Structure where
+module Synthesizer.Structure(
+  SoundEvent(..),
+  Channel(..),
+  SynSound(..),
+  Time,
+  Length,
+  Sample,
+  Frequency,
+  PhaseLength,
+  SamplingRate,
+  soundToSamples
+) where
+
+import Data.Foldable
+import Data.List
+import Data.Ord
 
 newtype SynSound = SynSound {
   channels :: [Channel]
@@ -21,21 +36,33 @@ data SoundEvent = SoundEvent {
   samples     :: SamplingRate -> [Sample]
 }
 
--- TODO: This isn't a very efficient implementation, but it seems to be fast enough for now
+data SoundEventCached = SoundEventCached {
+  event         :: SoundEvent,
+  samplesCached :: [Sample]
+}
+
 soundToSamples :: SynSound -> SamplingRate -> [Sample]
-soundToSamples sound rate = soundToSamples' sound rate 0
+soundToSamples sound rate = soundToSamples' convertedEvents [] rate 0
+  where
+    flatEvents = concatMap timeline (channels sound)
+    sortedEvents = sortOn startTime flatEvents
+    convertedEvents = map eagerEvaluate sortedEvents
+    eagerEvaluate e = SoundEventCached e (eagerSamples e)
+    eagerSamples  e = take (rate * ceiling (eventLength e) + 1) (samples e rate)
 
-soundToSamples' :: SynSound -> SamplingRate -> Int -> [Sample]
-soundToSamples' sound rate sampleNumber | done = []
-                                        | otherwise = sum samplesCurrentEvents : soundToSamples' sound rate (sampleNumber + 1)
-  where (currentEvents, done) = getCurrentEvents sound (fromIntegral sampleNumber / fromIntegral rate)
-        samplesCurrentEvents :: [Sample]
-        samplesCurrentEvents = map (\e -> samples e rate !! sampleNumber) currentEvents
+soundToSamples' :: [SoundEventCached] -> [SoundEventCached] -> SamplingRate -> Int -> [Sample]
+soundToSamples' []      []     _    _            = []
+soundToSamples' samToDo samCur rate sampleNumber = samplesCurrentEvents : soundToSamples' updatedToDo updatedCurrent' rate (sampleNumber + 1)
+  where currentTime = fromIntegral sampleNumber / fromIntegral rate
+        (updatedToDo, updatedCurrent) = mergeTodoAndCurrent (samToDo, samCur) currentTime
+        samplesCurrentEvents = foldr' (\e t -> t + head (samplesCached e)) 0 updatedCurrent
+        updatedCurrent' = map (\e -> e {samplesCached = tail (samplesCached e)}) updatedCurrent
 
 
-getCurrentEvents :: SynSound -> Time -> ([SoundEvent], Bool)
-getCurrentEvents sound time | not (null currentEvents) = (currentEvents, False)
-                            | otherwise                = (currentEvents, isDone)
-  where flatEvents = concatMap timeline (channels sound)
-        currentEvents = filter (\e -> time >= startTime e && time <= startTime e + eventLength e) flatEvents
-        isDone = not (any (\e -> time < startTime e + eventLength e) flatEvents)
+mergeTodoAndCurrent :: ([SoundEventCached], [SoundEventCached]) -> Time -> ([SoundEventCached], [SoundEventCached])
+mergeTodoAndCurrent (todo, current) time = (newTodo, newCurrent)
+  where eventsToCurrent []     = []
+        eventsToCurrent (x:xs) = if time >= startTime (event x) then x:eventsToCurrent xs else []
+        eventsFromTodo xs      = filter (\e -> time <= startTime (event e) + eventLength (event e)) xs
+        newTodo = drop (length $ eventsToCurrent todo) todo
+        newCurrent = eventsFromTodo $ current ++ eventsToCurrent todo
