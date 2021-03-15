@@ -2,11 +2,12 @@ module Main where
 
 import Data.Map                 ((!))
 import Synthesizer.Encoders.Wav
-import Synthesizer.Modifiers    (amplitude, roundToSample)
+import Synthesizer.Modifiers           (amplitude, roundToSample)
 import Synthesizer.Oscillator
 import Synthesizer.Structure
 
 import Notes.Default
+import Synthesizer.Modifiers.Envelopes
 
 mediumPrioritySignal :: SynSound
 mediumPrioritySignal = SynSound [
