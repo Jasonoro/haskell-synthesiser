@@ -31,10 +31,16 @@ applyEnvelope envelope soundEvent = SoundEvent startTime newEventLength newSampl
         (Envelope attackLength decayLength sustainLevel releaseLength) = envelope
         newEventLength = eventLength + releaseLength
         newSamples :: SamplingRate -> [Sample]
-        newSamples samplingRate = appliedSamples ++ ((last appliedSamples *) <$> rd)
+        newSamples samplingRate = appliedSamples ++ releaseSamples
             where
+                -- Samples
                 appliedSamples = zipWith (*) envelopeSteps input
                 input = samples samplingRate
+                -- ReleaseSamples - release needs the sound after the original samples
+                releaseSamples = zipWith (*) releaseSteps releaseInput
+                releaseInput = drop (length envelopeSteps) input
+                releaseSteps = rd
+                -- The envelope steps
                 envelopeSteps :: [Double]
                 envelopeSteps = ad ++ dd ++ sd
                 sr :: Double
