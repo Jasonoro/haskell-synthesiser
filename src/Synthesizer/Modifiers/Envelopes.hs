@@ -15,15 +15,6 @@ data Envelope = Envelope {
     releaseLength :: ReleaseLength -- ^ in seconds
 } deriving (Show)
 
-
--- attackLenght : 5 seconden
--- samplingRate : 2000
--- attackSteppers : 10000 ->  [0, 1]
-
--- [2,2,2]
--- [1,2,3]
--- [2,4,6]
-
 applyEnvelope :: Envelope -> SoundEvent -> SoundEvent
 applyEnvelope envelope soundEvent = SoundEvent startTime newEventLength newSamples
     where
