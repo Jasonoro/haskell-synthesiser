@@ -12,6 +12,7 @@ type Time         = Double
 type Length       = Double
 type Sample       = Int
 type Frequency    = Double
+type PhaseLength  = Int
 type SamplingRate = Int
 
 data SoundEvent = SoundEvent {
