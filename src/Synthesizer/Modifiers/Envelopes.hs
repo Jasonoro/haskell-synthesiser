@@ -13,7 +13,7 @@ data Envelope = Envelope {
     decayLength   :: DecayLength,  -- ^ in seconds
     sustainLevel  :: SustainLevel, -- ^ in seconds
     releaseLength :: ReleaseLength -- ^ in seconds
-}
+} deriving (Show)
 
 
 -- attackLenght : 5 seconden
@@ -31,22 +31,24 @@ applyEnvelope envelope soundEvent = SoundEvent startTime newEventLength newSampl
         (Envelope attackLength decayLength sustainLevel releaseLength) = envelope
         newEventLength = eventLength + releaseLength
         newSamples :: SamplingRate -> [Sample]
-        -- TODO: multiplicate rd time the last sample from the zipwith list
-        newSamples samplingRate = zipWith (*) envelopeSteps input ++ rd
+        newSamples samplingRate = appliedSamples ++ ((last appliedSamples *) <$> rd)
             where
+                appliedSamples = zipWith (*) envelopeSteps input
                 input = samples samplingRate
                 envelopeSteps :: [Double]
                 envelopeSteps = ad ++ dd ++ sd
                 sr :: Double
                 sr = fromIntegral samplingRate
                 ad :: [Double] -- [0.0, ..., 1.0]
-                ad = [0.0, (1.0 / (attackLength * sr))..1.0]
+                ad = [0.0, (1.0 / (attackLength * sr)) .. 1.0]
                 dd :: [Double] -- [1.0, .., sustainLevel]
-                dd = tail [1.0, 1.0 - ((1.0 - sustainLevel) / (decayLength * sr))..sustainLevel]
+                dd = tail [1.0, 1.0 - ((1.0 - sustainLevel) / (decayLength * sr)) .. sustainLevel]
                 sd :: [Double] --  [sustainLevel]
                 sd = replicate (round (sustainLength * sr)) sustainLevel
                     where
                         sustainLength = eventLength - attackLength - decayLength
                 -- TODO: the release stepper could start above the sustain level if attack and decay are longer than the eventLength
                 rd :: [Double] -- [sustainLevel, ..., 0.0]
-                rd = tail [sustainLevel, (sustainLevel - (1 / (releaseLength * sr)))..0.0]
+                rd = tail [sustainLevel, (sustainLevel - step) .. 0.0]
+                    where
+                        step = 1 / (releaseLength * sr) * sustainLevel
