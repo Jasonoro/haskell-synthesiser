@@ -44,10 +44,27 @@ type Amplitude = Double
 type Note = Char
 
 playNote :: Time -> Length -> Amplitude -> (Note, Octave) -> SoundEvent
-playNote startTime noteDuration amplitudeAmount note =
+playNote startTime noteDuration amplitudeAmount note = playNoteFromFrequency startTime noteDuration amplitudeAmount frequency
+    where
+
+        frequency = notes440 ! (fst note : (show . snd $ note))
+
+playChord :: Time -> Length -> Amplitude -> (Note, Octave) -> [SoundEvent]
+playChord startTime noteDuration amplitudeAmount note = [
+            playNoteFromFrequency startTime noteDuration (amplitudeAmount / 5) frequency,
+            playNoteFromFrequency startTime noteDuration (amplitudeAmount / 5) (frequency + 50),
+            playNoteFromFrequency startTime noteDuration (amplitudeAmount / 5) (frequency + 200),
+            playNoteFromFrequency startTime noteDuration (amplitudeAmount / 10) (frequency + 300),
+            playNoteFromFrequency startTime noteDuration (amplitudeAmount / 10) (frequency + 400)
+    ]
+    where
+        frequency = notes440 ! (fst note : (show . snd $ note))
+
+playNoteFromFrequency :: Time -> Length -> Amplitude -> Double -> SoundEvent
+playNoteFromFrequency startTime noteDuration amplitudeAmount frequency =
     applyEnvelope envelope $
     SoundEvent startTime noteDuration (amplitude amplitudeAmount . soundWave)
     where
-        soundWave = sineOscillator (notes440 ! (fst note : (show . snd $ note)))
+        soundWave = sineOscillator frequency
         -- for a standard note, make the envelope dependant on the duration of the note
         envelope = Envelope (noteDuration * 0.4) (noteDuration * 0.6) 0.5 (noteDuration * 0.2)
