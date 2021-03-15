@@ -25,7 +25,7 @@ newtype Channel = Channel {
 
 type Time         = Double
 type Length       = Double
-type Sample       = Int
+type Sample       = Double
 type Frequency    = Double
 type PhaseLength  = Int
 type SamplingRate = Int
