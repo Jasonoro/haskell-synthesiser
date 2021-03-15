@@ -1,7 +1,13 @@
 module Notes.Default where
 
-import Data.Map (Map, (!))
-import Notes    (generateNotes)
+import Data.Char
+import Data.Map                        (Map, (!))
+import Debug.Trace
+import Notes                           (generateNotes)
+import Synthesizer.Modifiers
+import Synthesizer.Modifiers.Envelopes
+import Synthesizer.Oscillator
+import Synthesizer.Structure
 
 -- Notes
 
@@ -33,3 +39,15 @@ g5 = notes440 ! "G5"
 
 -- Functions
 
+type Octave = Int
+type Amplitude = Double
+type Note = Char
+
+playNote :: Time -> Length -> Amplitude -> (Note, Octave) -> SoundEvent
+playNote startTime noteDuration amplitudeAmount note =
+    applyEnvelope envelope $
+    SoundEvent startTime noteDuration (amplitude amplitudeAmount . soundWave)
+    where
+        soundWave = sineOscillator (notes440 ! (fst note : (show . snd $ note)))
+        -- for a standard note, make the envelope dependant on the duration of the note
+        envelope = Envelope (noteDuration * 0.4) (noteDuration * 0.6) 0.5 (noteDuration * 0.2)
