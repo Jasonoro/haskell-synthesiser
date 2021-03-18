@@ -87,7 +87,7 @@ jobs:
         with:
           path: ~/.stack
           key: ${{ runner.os }}-build-${{ env.cache-name }}
-      - run: stack build --haddock --haddock-arguments "--odir ${PWD}/doc"
+      - run: stack build --haddock --no-haddock-deps --haddock-arguments "--odir ${PWD}/doc" haskell-synthesizer
       - name: Push docs
         uses: cpina/github-action-push-to-another-repository@master
         env:
