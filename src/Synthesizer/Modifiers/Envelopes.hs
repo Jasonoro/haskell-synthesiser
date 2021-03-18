@@ -16,6 +16,7 @@ data Envelope = Envelope {
     releaseLength :: ReleaseLength -- ^ in seconds
 } deriving (Show)
 
+-- | Apply an envelope to a SoundEvent. This creates a new SoundEvent with changed properties
 applyEnvelope :: Envelope -> SoundEvent -> SoundEvent
 applyEnvelope envelope soundEvent = SoundEvent startTime newEventLength newSamples
     where

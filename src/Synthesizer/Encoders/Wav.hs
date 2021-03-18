@@ -13,9 +13,11 @@ import           System.Directory
 import           System.IO
 import           System.IO.Error         hiding (catch)
 
+-- | The sampling rate of the WAV file
 samplingRate :: Num hz => hz
 samplingRate = 44100
 
+-- | Write the given given the callback data. Overwrites the file if it already exists.
 writeWaveFile :: FilePath            -- ^ Where to save the file
               -> W.Wave              -- ^ Parameters of the WAVE file
               -> (Handle -> IO ())   -- ^ Callback that will be used to write WAVE data
@@ -26,7 +28,10 @@ writeWaveFile path wave writeData = do
   where ignoreDoesNotExists e | isDoesNotExistError e = return ()
                               | otherwise = throwIO e
 
-saveSignal :: FilePath -> SynSound -> IO ()
+-- | Save the generated sound of the Synthesizer into a WAV file. Overwrites the file if it already exists.
+saveSignal :: FilePath     -- ^ The file name or location. A .wav extension will be appended to the file
+           -> SynSound     -- ^ The structure representing your sound
+           -> IO ()
 saveSignal filename sound = do
   let samples = soundToSamples sound samplingRate
   let numSamples = length samples
@@ -43,6 +48,8 @@ saveSignal filename sound = do
   let wavfile = filename <> ".wav"
   writeWaveFile wavfile wave $ \handle -> B.hPutBuilder handle (mconcat $ B.int16LE <$> map sampleToI16 samples)
 
+-- TODO: Don't we want to throw an error?
+-- | Convert a sample to an Int16, as that is the biggest amplitude WAV supports
 sampleToI16 :: Sample -> Int16
 sampleToI16 s | s > 32767 = 32767
               | s < -32768 = -32768

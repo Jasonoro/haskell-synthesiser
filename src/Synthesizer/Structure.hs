@@ -41,6 +41,8 @@ data SoundEventCached = SoundEventCached {
   samplesCached :: [Sample]
 }
 
+-- | Converts the sound structure to a list of samples with a certain sampling rate.
+-- | The worst-case time complexity of the algorithm is @O(n log n)@, where n is the amount of sound events.
 soundToSamples :: SynSound -> SamplingRate -> [Sample]
 soundToSamples sound rate = soundToSamples' convertedEvents [] rate 0
   where
