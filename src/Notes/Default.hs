@@ -6,6 +6,7 @@ import Notes    (generateNotes)
 
 -- Notes
 
+-- | Generate a note map at the base frequency of 440Hz. See 'generateNotes' for the more customisable implementation.
 notes440 :: Map String Double
 notes440 = generateNotes 440
 
