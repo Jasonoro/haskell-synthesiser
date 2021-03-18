@@ -46,7 +46,6 @@ type Note = Char
 playNote :: Time -> Length -> Amplitude -> (Note, Octave) -> SoundEvent
 playNote startTime noteDuration amplitudeAmount note = playNoteFromFrequency startTime noteDuration amplitudeAmount frequency
     where
-
         frequency = notes440 ! (fst note : (show . snd $ note))
 
 playChord :: Time -> Length -> Amplitude -> (Note, Octave) -> [SoundEvent]
