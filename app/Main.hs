@@ -1,4 +1,5 @@
-module Main where
+module Main
+  where
 
 import Data.Map                        ((!))
 import Synthesizer.Encoders.Wav

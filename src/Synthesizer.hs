@@ -1,2 +1,3 @@
-module Synthesizer where
+module Synthesizer
+  where
 

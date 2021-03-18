@@ -1,15 +1,15 @@
-module Synthesizer.Structure(
-  SoundEvent(..),
-  Channel(..),
-  SynSound(..),
-  Time,
-  Length,
-  Sample,
-  Frequency,
-  PhaseLength,
-  SamplingRate,
-  soundToSamples
-) where
+module Synthesizer.Structure
+  ( Channel (..)
+  , Frequency
+  , Length
+  , PhaseLength
+  , Sample
+  , SamplingRate
+  , SoundEvent (..)
+  , SynSound (..)
+  , Time
+  , soundToSamples
+  ) where
 
 import Data.Foldable
 import Data.List

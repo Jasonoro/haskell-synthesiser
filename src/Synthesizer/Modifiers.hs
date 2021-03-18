@@ -1,4 +1,5 @@
-module Synthesizer.Modifiers where
+module Synthesizer.Modifiers
+  where
 
 import Synthesizer.Structure (Sample)
 
