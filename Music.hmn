@@ -1,0 +1,19 @@
+// Settings
+// A4=440, SampleRate=44100, ...
+
+// Music
+// [duration in seconds] - [note / notes]
+[Channel 1]
+3   - c0
+3/2 - d0
+1/2 - e1
+1/2 - |
+1/4 - e2
+1   - d4
+1   - e4
+5   - c4 d4 e4
+
+[Channel 2]
+3   - c0
+3/2 - d0
+1/2 - e1
