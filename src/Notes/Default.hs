@@ -1,4 +1,5 @@
-module Notes.Default where
+module Notes.Default
+  where
 
 import Data.Map (Map, (!))
 import Notes    (generateNotes)

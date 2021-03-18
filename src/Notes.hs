@@ -1,4 +1,5 @@
-module Notes where
+module Notes
+  where
 
 import Data.Map (Map, fromList, (!))
 

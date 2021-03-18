@@ -1,4 +1,5 @@
-module Synthesizer.Modifiers.Envelopes where
+module Synthesizer.Modifiers.Envelopes
+  where
 
 import Debug.Trace
 import Synthesizer.Structure

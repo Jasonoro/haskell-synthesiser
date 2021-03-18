@@ -1,4 +1,5 @@
-module Synthesizer.Encoders.Wav where
+module Synthesizer.Encoders.Wav
+  where
 
 import qualified Codec.Audio.Wave        as W
 import           Control.Exception
