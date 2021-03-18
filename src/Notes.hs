@@ -3,6 +3,14 @@ module Notes
 
 import Data.Map (Map, fromList, (!))
 
+
+
+
+
+
+
+
+
 -- | 9 * length notes
 numberOfScaleNotes :: Int
 numberOfScaleNotes = 9 * length notes
