@@ -13,7 +13,7 @@ import           System.IO
 import           System.IO.Error         hiding (catch)
 
 samplingRate :: Num hz => hz
-samplingRate = 11025
+samplingRate = 44100
 
 writeWaveFile :: FilePath            -- ^ Where to save the file
               -> W.Wave              -- ^ Parameters of the WAVE file
@@ -45,4 +45,4 @@ saveSignal filename sound = do
 sampleToI16 :: Sample -> Int16
 sampleToI16 s | s > 32767 = 32767
               | s < -32768 = -32768
-              | otherwise = fromIntegral s
+              | otherwise = fromIntegral $ round s
