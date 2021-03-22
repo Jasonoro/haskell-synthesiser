@@ -92,6 +92,28 @@ instance ShiftOctave Note Note where
 instance ShiftOctave [Note] [Note] where
   (^) notes octaveShift = map (^ octaveShift) notes
 
+class ModulateTone a b where
+  (#=) :: a -> Tone -> b
+
+instance ModulateTone Note Note where
+  (#=) note tone = note { getTone = tone }
+
+instance ModulateTone [Note] [Note] where
+  (#=) notes tone = map (#= tone) notes
+
+type ToneShift = Int
+
+class ShiftTone a b where
+  (#) :: a -> ToneShift -> b
+
+instance ShiftTone Note Note where
+  (#) note toneShift = note { getTone = newTone }
+    where
+      newTone = getToneFromInt $ getIntFromTone (getTone note) + toneShift
+
+instance ShiftTone [Note] [Note] where
+  (#) notes toneShift = map (# toneShift) notes
+
 getNoteFrequency :: Note -> Frequency
 getNoteFrequency note = undefined
 
@@ -103,3 +125,9 @@ getOctaveFromInt = toEnum
 
 getIntFromOctave :: Octave -> Int
 getIntFromOctave = fromEnum
+
+getToneFromInt :: Int -> Tone
+getToneFromInt = toEnum
+
+getIntFromTone :: Tone -> Int
+getIntFromTone = fromEnum
