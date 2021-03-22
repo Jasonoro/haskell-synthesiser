@@ -18,7 +18,7 @@ languageTests =
     testCase "Shift Octave - Positive"    $ testNote ^ 5                        @?= Note D Flat Six,
     testCase "Shift Octave - Negative"    $ testNote ^ (-1)                     @?= Note D Flat Zero,
     testCase "Shift Octave - Combine"     $ (testNote ^ (-1) :: Note) ^ 1       @?= testNote,
-    testCase "Modulate Octave - Multiple" $ testNotes ^ 5                       @?= [Note D Flat Six, Note D Flat Six, Note D Flat Six],
+    testCase "Shift Octave - Multiple"    $ testNotes ^ 5                       @?= [Note D Flat Six, Note D Flat Six, Note D Flat Six],
     -- Modulate octaves
     testCase "Modulate Octave"            $ testNote ^= Zero                    @?= Note D Flat Zero,
     testCase "Modulate Octave - Combine"  $ (testNote ^= Zero :: Note) ^= Six   @?= Note D Flat Six,
