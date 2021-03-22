@@ -42,11 +42,13 @@ executables:
 
 tests:
   haskell-synthesizer-test:
-    main:                Spec.hs
-    source-dirs:         test
+    main:                test.hs
+    source-dirs:         tests
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
     - haskell-synthesizer
+    - tasty
+    - tasty-hunit
