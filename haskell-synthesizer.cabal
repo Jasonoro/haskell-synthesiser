@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0f4e51a29635d741d86986a17a0adc8a8eecf574018e51f4d771cf0895080562
+-- hash: 774404d7b023e03cf038bc7e68dd65e6ffc0450aa9564bb85b2ff64b61095c68
 
 name:           haskell-synthesizer
 version:        0.1.0.0
@@ -68,6 +68,9 @@ test-suite haskell-synthesizer-test
   main-is: test.hs
   other-modules:
       Tests.Notes
+      Tests.Notes.Default
+      Tests.Synthesizer.Oscillator
+      Tests.Synthesizer.Structure
       Paths_haskell_synthesizer
   hs-source-dirs:
       tests
