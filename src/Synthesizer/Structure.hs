@@ -37,7 +37,7 @@ data SoundEvent = SoundEvent {
 }
 
 instance Show SoundEvent where
-  show (SoundEvent startTime eventLength _) = "SoundEvent " ++ show startTime ++ " " ++ show eventLength
+  show (SoundEvent startTime eventLength _) = "SoundEvent { startTime = " ++ show startTime ++ " eventLength = " ++ show eventLength ++ " samples = ... }"
 
 data SoundEventCached = SoundEventCached {
   event         :: SoundEvent,

@@ -23,7 +23,7 @@ data Octave = Zero | One | Two | Three | Four | Five | Six | Seven | Eight
   deriving (Show, Enum, Ord, Eq)
 
 octaves :: [Octave]
-octaves = [One ..]
+octaves = [Zero ..]
 
 data Note = Note
   { getTone   :: Tone
