@@ -65,6 +65,6 @@ mergeTodoAndCurrent :: ([SoundEventCached], [SoundEventCached]) -> Time -> ([Sou
 mergeTodoAndCurrent (todo, current) time = (newTodo, newCurrent)
   where eventsToCurrent []     = []
         eventsToCurrent (x:xs) = if time >= startTime (event x) then x:eventsToCurrent xs else []
-        eventsFromTodo xs      = filter (\e -> time <= startTime (event e) + eventLength (event e)) xs
+        eventsFromTodo xs      = filter (\e -> time < startTime (event e) + eventLength (event e)) xs
         newTodo = drop (length $ eventsToCurrent todo) todo
         newCurrent = eventsFromTodo $ current ++ eventsToCurrent todo
