@@ -1,10 +1,16 @@
 module Synthesizer.Converters.Language
   where
 
-import Language
-import Notes                 (generateNotes)
-import Synthesizer.Structure (Channel, Frequency, Sample, SoundEvent,
-                              SynSound (..))
+import Data.Map                        (Map, (!))
+import Language                        (Instrument (..), MusicPiece (..), Note,
+                                        NoteEvent (NoteEvent))
+import Notes                           (generateNotes)
+import Synthesizer.Modifiers           (amplitude)
+import Synthesizer.Modifiers.Envelopes (Envelope (Envelope), applyEnvelope)
+import Synthesizer.Oscillator          (sineOscillator)
+import Synthesizer.Structure           (Channel (..), Frequency, Sample,
+                                        SamplingRate, SoundEvent (..),
+                                        SynSound (..))
 
 convertMusicPieceToSynthesizer :: MusicPiece -> SynSound
 convertMusicPieceToSynthesizer musicPiece = SynSound $ map convertInstrumentToChannel instruments
@@ -12,20 +18,25 @@ convertMusicPieceToSynthesizer musicPiece = SynSound $ map convertInstrumentToCh
     (MusicPiece instruments) = musicPiece
 
 convertInstrumentToChannel :: Instrument -> Channel
-convertInstrumentToChannel instrument = undefined
+convertInstrumentToChannel instrument = Channel $ map (convertNoteEventsToSoundEvents noteMap) noteEvents
   where
     (Instrument baseFreq noteEvents) = instrument
     noteMap = generateNotes baseFreq
 
-convertNoteEventsToSoundEvents :: NoteEvent -> SoundEvent
-convertNoteEventsToSoundEvents noteEvent = undefined
+convertNoteEventsToSoundEvents :: Map Note Frequency -> NoteEvent -> SoundEvent
+convertNoteEventsToSoundEvents noteMap noteEvent = applyEnvelope amplitudeEnvelope $ SoundEvent startTime duration samples
   where
     (NoteEvent startTime duration note) = noteEvent
+    samples :: SamplingRate -> [Sample]
+    samples samplingRate = convertFrequencyToSamples samplingRate noteFreq
+    noteFreq :: Frequency
+    noteFreq = convertNoteToFrequency noteMap note
+    amplitudeEnvelope = Envelope 0.2 0.3 0.5 0.2
 
-convertNoteToFrequency :: Note -> Frequency
-convertNoteToFrequency note = undefined
+convertNoteToFrequency :: Map Note Frequency -> Note -> Frequency
+convertNoteToFrequency noteMap note = noteMap ! note
+
+convertFrequencyToSamples :: SamplingRate -> Frequency -> [Sample]
+convertFrequencyToSamples samplingRate freq = (amplitude amplitudeAmount . sineOscillator freq) samplingRate
   where
-    (Note tone pitch octave) = note
-
-convertFrequencyToSamples :: Frequency -> [Sample]
-convertFrequencyToSamples freq = undefined
+    amplitudeAmount = 32767

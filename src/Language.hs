@@ -8,20 +8,29 @@ import Prelude               hiding ((^))
 import Synthesizer.Structure (Frequency)
 
 data Tone = C | D | E | F | G | A | B
-  deriving (Show)
+  deriving (Show, Enum, Ord, Eq)
+
+tones :: [Tone]
+tones = [C ..]
 
 data Pitch = Flat | Sharp
-  deriving (Show)
+  deriving (Show, Enum, Ord, Eq)
 
-data Octave = One | Two | Three | Four | Five | Six | Seven | Eight
-  deriving (Show)
+pitches :: [Pitch]
+pitches = [Flat ..]
+
+data Octave = Zero | One | Two | Three | Four | Five | Six | Seven | Eight
+  deriving (Show, Enum, Ord, Eq)
+
+octaves :: [Octave]
+octaves = [One ..]
 
 data Note = Note
   { getTone   :: Tone
   , getPitch  :: Pitch
   , getOctave :: Octave
   }
-  deriving (Show)
+  deriving (Show, Ord, Eq)
 
 data ChordType =
   Major
@@ -33,7 +42,7 @@ data ChordType =
   | Suspended
   | Augmented
   | Extended
-  deriving (Show)
+  deriving (Show, Enum)
 
 type BaseNote = Note
 
@@ -90,37 +99,7 @@ getChordNotes :: Chord -> [Note]
 getChordNotes chord = undefined
 
 getOctaveFromInt :: Int -> Octave
-getOctaveFromInt 1 = One
-getOctaveFromInt 2 = Two
-getOctaveFromInt 3 = Three
-getOctaveFromInt 4 = Four
-getOctaveFromInt 5 = Five
-getOctaveFromInt 6 = Six
-getOctaveFromInt 7 = Seven
-getOctaveFromInt 8 = Eight
-getOctaveFromInt _ = error "Invalid Int for Octave"
+getOctaveFromInt = toEnum
 
 getIntFromOctave :: Octave -> Int
-getIntFromOctave One   = 1
-getIntFromOctave Two   = 2
-getIntFromOctave Three = 3
-getIntFromOctave Four  = 4
-getIntFromOctave Five  = 5
-getIntFromOctave Six   = 6
-getIntFromOctave Seven = 7
-getIntFromOctave Eight = 8
-
-musicPiece :: MusicPiece
-musicPiece = MusicPiece [
-    -- lead
-    Instrument 440 [
-      NoteEvent 0 1 note,
-      NoteEvent 1 1 note
-    ],
-    -- bass
-    Instrument 120 [
-      NoteEvent 0 2 note
-    ]
-  ]
-  where
-    note = C ^= Three
+getIntFromOctave = fromEnum

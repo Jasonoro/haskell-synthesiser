@@ -1,38 +1,37 @@
 module Notes
   where
 
-import Data.Map (Map, fromList, (!))
+import Data.Map              (Map, fromList, (!))
+import Language              (Note (..), Pitch (..), Tone (..),
+                              getOctaveFromInt, octaves)
+import Synthesizer.Structure (Frequency)
 
--- | 9 * length notes
-numberOfScaleNotes :: Int
-numberOfScaleNotes = 9 * length notes
+-- | [C, C#, D, D#, E, F, F#, G, G#, A, A#, B]
+playableTonesPitches :: [(Tone, Pitch)]
+playableTonesPitches = [(C, Flat), (C, Sharp), (D, Flat), (D, Sharp), (E, Flat), (F, Flat), (F, Sharp), (G, Flat), (G, Sharp), (A, Flat), (A, Sharp), (B, Flat)]
 
--- | ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-notes :: [String]
-notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+-- | length octaves * length playableTonesPitches
+amountOfNotes :: Int
+amountOfNotes = length octaves * length playableTonesPitches
 
 -- | Generates a Map of notes and their frequency given a base frequency for note A4
-generateNotes :: Double            -- ^ Base frequency for note A4 (Most used value: 440 Hz)
-              -> Map String Double -- ^ Returns list of notes with their frequency
-generateNotes freqA4 = fromList [generateNote c0 i | i <- [0..numberOfScaleNotes-1]]
+generateNotes :: Frequency          -- ^ Base frequency for note A4 (Most used value: 440 Hz)
+              -> Map Note Frequency -- ^ Returns list of notes with their frequency
+generateNotes freqA4 = fromList [generateNote c0 i | i <- [0..amountOfNotes-1]]
   where
-    c0 :: Double
+    c0 :: Frequency
     c0 = freqA4 * (2 ** (-4.75))
 
 -- | Generates a note and their frequency given the frequency for the note C0 and the offset from C0
-generateNote :: Double -- ^ The frequency of note C0
-             -> Int    -- ^ The offset from the note C0
-             -> (String, Double) -- ^ A tuple with the note and their frequency
-generateNote freqBase i = (note ++ show octave, freq)
+generateNote :: Frequency         -- ^ The frequency of note C0
+             -> Int               -- ^ The offset from the note C0
+             -> (Note, Frequency) -- ^ A tuple with the note and their frequency
+generateNote freqBase i = (Note tone pitch octave, freq)
   where
-    freq :: Double
+    (tone, pitch) = playableTonesPitches !! (i `mod` length playableTonesPitches)
     freq = frequencySteps freqBase i
-    note :: String
-    note = notes !! (i `mod` length notes)
-    semitone :: Int
     semitone = numberOfSemitones freqBase freq
-    octave :: Int
-    octave = semitone `div` length notes
+    octave = getOctaveFromInt $ semitone `div` length playableTonesPitches
 
 -- | The basic formula for the frequencies of the notes of the equal tempered scale.
 --
