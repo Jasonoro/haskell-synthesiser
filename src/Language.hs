@@ -81,37 +81,37 @@ instance ModulateOctave [Tone] [Note] where
 
 type OctaveShift = Int
 
-class ShiftOctave a b where
-  (^) :: a -> OctaveShift -> b
+class ShiftOctave a where
+  (^) :: a -> OctaveShift -> a
 
-instance ShiftOctave Note Note where
+instance ShiftOctave Note where
   (^) note octaveShift = note { getOctave = newOctave }
     where
       newOctave = getOctaveFromInt $ getIntFromOctave (getOctave note) + octaveShift
 
-instance ShiftOctave [Note] [Note] where
+instance ShiftOctave [Note] where
   (^) notes octaveShift = map (^ octaveShift) notes
 
-class ModulateTone a b where
-  (#=) :: a -> Tone -> b
+class ModulateTone a where
+  (#=) :: a -> Tone -> a
 
-instance ModulateTone Note Note where
+instance ModulateTone Note where
   (#=) note tone = note { getTone = tone }
 
-instance ModulateTone [Note] [Note] where
+instance ModulateTone [Note] where
   (#=) notes tone = map (#= tone) notes
 
 type ToneShift = Int
 
-class ShiftTone a b where
-  (#) :: a -> ToneShift -> b
+class ShiftTone a where
+  (#) :: a -> ToneShift -> a
 
-instance ShiftTone Note Note where
+instance ShiftTone Note where
   (#) note toneShift = note { getTone = newTone }
     where
       newTone = getToneFromInt $ getIntFromTone (getTone note) + toneShift
 
-instance ShiftTone [Note] [Note] where
+instance ShiftTone [Note] where
   (#) notes toneShift = map (# toneShift) notes
 
 getNoteFrequency :: Note -> Frequency
