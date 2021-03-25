@@ -1,8 +1,9 @@
 import Test.Tasty
+import Tests.Language
 import Tests.Notes
 import Tests.Notes.Default
-import Tests.Synthesizer.Structure
 import Tests.Synthesizer.Oscillator
+import Tests.Synthesizer.Structure
 
 main = defaultMain tests
 
@@ -11,7 +12,8 @@ tests = testGroup "Tests" [unitTestsTree]
 
 unitTestsTree :: TestTree
 unitTestsTree = testGroup "UnitTests"
-  [ testGroup "Tests.Notes" notesTests
+  [ testGroup "Tests.Language" languageTests
+  , testGroup "Tests.Notes" notesTests
   , testGroup "Tests.Notes.Default" defaultNotesTests
   , testGroup "Tests.Synthesizer.Structure" synthesizerStructureTests
   , testGroup "Tests.Synthesizer.Oscillator" oscillatorStructureTests ]
