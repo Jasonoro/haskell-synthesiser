@@ -11,7 +11,7 @@ testNotes = [testNote, testNote, testNote]
 languageTests =
   [
     -- basic constructors
-    testCase "The are 12 tones"           $ length tones                        @?= 7,
+    testCase "The are 7 tones"            $ length tones                        @?= 7,
     testCase "The are 2 pitches"          $ length pitches                      @?= 2,
     testCase "The are 9 octaves"          $ length octaves                      @?= 9,
     -- Shift octaves
