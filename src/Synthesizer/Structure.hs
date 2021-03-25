@@ -17,11 +17,11 @@ import Data.Ord
 
 newtype SynSound = SynSound {
   channels :: [Channel]
-}
+} deriving (Show)
 
 newtype Channel = Channel {
   timeline :: [SoundEvent]
-}
+} deriving (Show)
 
 type Time         = Double
 type Length       = Double
@@ -35,6 +35,9 @@ data SoundEvent = SoundEvent {
   eventLength :: Length,
   samples     :: SamplingRate -> [Sample]
 }
+
+instance Show SoundEvent where
+  show (SoundEvent startTime eventLength _) = "SoundEvent { startTime = " ++ show startTime ++ " eventLength = " ++ show eventLength ++ " samples = ... }"
 
 data SoundEventCached = SoundEventCached {
   event         :: SoundEvent,
