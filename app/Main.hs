@@ -1,16 +1,11 @@
 module Main
   where
 
-import Data.Map                        ((!))
-import Synthesizer.Encoders.Wav
-import Synthesizer.Modifiers           (amplitude)
-import Synthesizer.Modifiers.Envelopes
-import Synthesizer.Oscillator
-import Synthesizer.Structure
-
 import Language
 import Notes.Default
 import Synthesizer.Converters.Language (convertMusicPieceToSynthesizer)
+import Synthesizer.Encoders.Wav
+import Synthesizer.Structure
 
 musicPiece :: MusicPiece
 musicPiece = MusicPiece [
