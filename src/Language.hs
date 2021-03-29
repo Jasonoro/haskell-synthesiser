@@ -5,7 +5,9 @@ module Language
   where
 
 import Prelude                         hiding ((^))
-import Synthesizer.Modifiers.Envelopes (Envelope (..))
+import Synthesizer.Modifiers.Envelopes (AttackLength, DecayLength,
+                                        Envelope (..), ReleaseLength,
+                                        SustainLevel)
 import Synthesizer.Structure           (Frequency)
 
 -- | The Tone of the Note is represented using the western-style naming scheme:
@@ -61,20 +63,29 @@ data Chord = Chord
   }
   deriving (Show)
 
-type StartTime = Double
-type Duration = Double
+type StartTime     = Double
+type Duration      = Double
 type AmplitudeMult = Double
-data NoteEvent = NoteEvent StartTime Duration AmplitudeMult Note | ChordEvent StartTime Duration Chord
+-- | NoteEvent contains StartTime, the Duration of the Note, the multiplier for the Amplitude of the Note and the Note itself
+data NoteEvent = NoteEvent StartTime Duration AmplitudeMult Note
+               | ChordEvent StartTime Duration Chord
   deriving (Show)
 
-type BaseFrequency = Frequency
-type Amplitude = Double
-type BaseAmplitude = Amplitude
-type NoteStrike = Envelope
+noteStrike :: AttackLength -> DecayLength -> SustainLevel -> ReleaseLength -> Envelope
 noteStrike = Envelope
+
+type BaseFrequency = Frequency
+type Amplitude     = Double
+type BaseAmplitude = Amplitude
+type NoteStrike    = Envelope
+-- | Instrument contains the BaseFrequency where the Note frequencies are based on.
+-- The BaseAmplitude is the volume where the Instruments plays on.
+-- The NoteStrike which describes how the note amplitude is played with attack, decay, sustain and release.
+-- And the list of NoteEvents which describe the played notes
 data Instrument = Instrument BaseFrequency BaseAmplitude NoteStrike [NoteEvent]
   deriving (Show)
 
+-- | The MusicPiece is a list of instruments which are played together
 newtype MusicPiece = MusicPiece [Instrument]
   deriving (Show)
 
