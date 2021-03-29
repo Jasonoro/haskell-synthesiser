@@ -21,11 +21,11 @@ import Data.Ord
 
 newtype SynSound = SynSound {
   channels :: [Channel]
-} deriving (Show)
+} deriving (Show, Eq)
 
 newtype Channel = Channel {
   timeline :: [SoundEvent]
-} deriving (Show)
+} deriving (Show, Eq)
 
 type Time         = Double
 type Length       = Double
@@ -39,6 +39,13 @@ data SoundEvent = SoundEvent {
   eventLength :: Length,
   samples     :: SamplingRate -> [Sample]
 }
+
+-- | Eq instance for SoundEvents. It should be noted that this isn't 100% sound, as if the first 100 samples are exactly
+-- | the same but a sample after that is different, this will be unsound.
+instance Eq SoundEvent where
+  a == b = startTime a == startTime b &&
+           eventLength a == eventLength b &&
+           take 100 (samples a 100) == take 100 (samples b 100)
 
 instance Show SoundEvent where
   show (SoundEvent startTime eventLength _) = "SoundEvent { startTime = " ++ show startTime ++ " eventLength = " ++ show eventLength ++ " samples = ... }"
