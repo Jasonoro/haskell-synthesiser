@@ -12,7 +12,7 @@ type ReleaseLength = Double
 data Envelope = Envelope {
     attackLength  :: AttackLength, -- ^ in seconds
     decayLength   :: DecayLength,  -- ^ in seconds
-    sustainLevel  :: SustainLevel, -- ^ in seconds
+    sustainLevel  :: SustainLevel, -- ^ between 0 - 1
     releaseLength :: ReleaseLength -- ^ in seconds
 } deriving (Show)
 
