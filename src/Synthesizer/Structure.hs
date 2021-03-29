@@ -8,6 +8,10 @@ module Synthesizer.Structure
   , SoundEvent (..)
   , SynSound (..)
   , Time
+  , addChannel
+  , addToNewChannel
+  , getAllEvents
+  , getAllEventsDuring
   , soundToSamples
   ) where
 
@@ -49,8 +53,7 @@ data SoundEventCached = SoundEventCached {
 soundToSamples :: SynSound -> SamplingRate -> [Sample]
 soundToSamples sound rate = soundToSamples' convertedEvents [] rate 0
   where
-    flatEvents = concatMap timeline (channels sound)
-    sortedEvents = sortOn startTime flatEvents
+    sortedEvents = sortOn startTime (getAllEvents sound)
     convertedEvents = map eagerEvaluate sortedEvents
     eagerEvaluate e = SoundEventCached e (eagerSamples e)
     eagerSamples  e = take (rate * ceiling (eventLength e) + 1) (samples e rate)
@@ -71,3 +74,24 @@ mergeTodoAndCurrent (todo, current) time = (newTodo, newCurrent)
         eventsFromTodo xs      = filter (\e -> time < startTime (event e) + eventLength (event e)) xs
         newTodo = drop (length $ eventsToCurrent todo) todo
         newCurrent = eventsFromTodo $ current ++ eventsToCurrent todo
+
+
+-- Multiple helper functions for easy adding/removing events
+
+-- | Adds a channel to a SynSound
+addChannel :: SynSound -> Channel -> SynSound
+addChannel s c = s {channels = c : channels s}
+
+-- | Adds SoundEvents to a new channel.
+addToNewChannel :: SynSound -> [SoundEvent] -> SynSound
+addToNewChannel s xs = addChannel s (Channel xs)
+
+-- | Gets all events currently in the synthesizer.
+getAllEvents :: SynSound -> [SoundEvent]
+getAllEvents s = concatMap timeline (channels s)
+
+-- | Gets all events that overlap with a time period of (startTime, endTime).
+-- | Passing an endTime that is before the startTime will result in no events being returned.
+getAllEventsDuring :: SynSound -> (Time, Time) -> [SoundEvent]
+getAllEventsDuring s (start, end) = filter (\e -> start < (startTime e + eventLength e) && startTime e < end) events
+  where events = getAllEvents s
