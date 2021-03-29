@@ -60,9 +60,7 @@ data NoteEvent = NoteEvent StartTime Duration Note | ChordEvent StartTime Durati
 
 type BaseFrequency = Frequency
 type NoteStrike = Envelope
-
 noteStrike = Envelope
-
 data Instrument = Instrument BaseFrequency NoteStrike [NoteEvent]
   deriving (Show)
 
