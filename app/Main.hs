@@ -9,7 +9,7 @@ import Synthesizer.Structure
 
 musicPiece :: MusicPiece
 musicPiece = MusicPiece [
-    Instrument 440 [
+    Instrument 440 (noteStrike 0.2 0.3 0.5 0.2) [
       NoteEvent 0   0.5 (C ^= Four),
       NoteEvent 0.5 0.5 (D ^= Four),
       NoteEvent 1   0.5 (E ^= Four),

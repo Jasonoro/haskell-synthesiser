@@ -4,8 +4,9 @@
 module Language
   where
 
-import Prelude               hiding ((^))
-import Synthesizer.Structure (Frequency)
+import Prelude                         hiding ((^))
+import Synthesizer.Modifiers.Envelopes (Envelope (..))
+import Synthesizer.Structure           (Frequency)
 
 data Tone = C | D | E | F | G | A | B
   deriving (Show, Enum, Ord, Eq)
@@ -58,7 +59,11 @@ data NoteEvent = NoteEvent StartTime Duration Note | ChordEvent StartTime Durati
   deriving (Show)
 
 type BaseFrequency = Frequency
-data Instrument = Instrument BaseFrequency [NoteEvent]
+type NoteStrike = Envelope
+
+noteStrike = Envelope
+
+data Instrument = Instrument BaseFrequency NoteStrike [NoteEvent]
   deriving (Show)
 
 newtype MusicPiece = MusicPiece [Instrument]
