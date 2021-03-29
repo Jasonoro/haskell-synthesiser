@@ -8,24 +8,32 @@ import Prelude                         hiding ((^))
 import Synthesizer.Modifiers.Envelopes (Envelope (..))
 import Synthesizer.Structure           (Frequency)
 
+-- | The Tone of the Note is represented using the western-style naming scheme:
+--
+-- C | D | E | F | G | A | B
 data Tone = C | D | E | F | G | A | B
   deriving (Show, Enum, Ord, Eq)
 
 tones :: [Tone]
 tones = [C ..]
 
+-- | The Note is played with a Pitch
+--
+-- The Pitch can be Flat or Sharp
 data Pitch = Flat | Sharp
   deriving (Show, Enum, Ord, Eq)
 
 pitches :: [Pitch]
 pitches = [Flat ..]
 
+-- | The Note can be played with different Octaves. The Octaves ranges from Zero - Eight
 data Octave = Zero | One | Two | Three | Four | Five | Six | Seven | Eight
   deriving (Show, Enum, Ord, Eq)
 
 octaves :: [Octave]
 octaves = [Zero ..]
 
+-- | Note contains a Tone, Pitch and Octave
 data Note = Note
   { getTone   :: Tone
   , getPitch  :: Pitch
