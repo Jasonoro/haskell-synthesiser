@@ -9,6 +9,7 @@ synthesizerStructureTests =
   , testSampleMultipleChannels
   , testSampleGenerationTimeSteps
   , testGetAllEvents
+  , testGetAllEventsDuring
   , testAddChannel
   , testAddToNewChannel ]
 

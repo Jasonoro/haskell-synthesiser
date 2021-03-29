@@ -40,12 +40,15 @@ data SoundEvent = SoundEvent {
   samples     :: SamplingRate -> [Sample]
 }
 
--- | Eq instance for SoundEvents. It should be noted that this isn't 100% sound, as if the first 100 samples are exactly
--- | the same but a sample after that is different, this will be unsound.
+-- | Eq instance for SoundEvents. It should be noted that this isn't 100% sound, as if the needed samples for generating
+-- | sounds are exactly the same but a sample after that is different, this will return equality even if it really
+-- | isn't. However functionally these two events are the same, since at maximum that amount
+-- | of samples will be used when generating the sound from them. So there is no practical difference in this context
 instance Eq SoundEvent where
   a == b = startTime a == startTime b &&
            eventLength a == eventLength b &&
-           take 100 (samples a 100) == take 100 (samples b 100)
+           takeNeededSamples a rate == takeNeededSamples b rate
+    where rate = 100
 
 instance Show SoundEvent where
   show (SoundEvent startTime eventLength _) = "SoundEvent { startTime = " ++ show startTime ++ " eventLength = " ++ show eventLength ++ " samples = ... }"
@@ -55,6 +58,11 @@ data SoundEventCached = SoundEventCached {
   samplesCached :: [Sample]
 }
 
+-- | Takes the maximum needed samples to generate the sound. This is dependent on the sampling rate and the length of
+-- | the event.
+takeNeededSamples :: SoundEvent -> SamplingRate -> [Sample]
+takeNeededSamples e rate = take (rate * ceiling (eventLength e) + 1) (samples e rate)
+
 -- | Converts the sound structure to a list of samples with a certain sampling rate.
 -- | The worst-case time complexity of the algorithm is @O(n log n)@, where n is the amount of sound events.
 soundToSamples :: SynSound -> SamplingRate -> [Sample]
@@ -63,7 +71,7 @@ soundToSamples sound rate = soundToSamples' convertedEvents [] rate 0
     sortedEvents = sortOn startTime (getAllEvents sound)
     convertedEvents = map eagerEvaluate sortedEvents
     eagerEvaluate e = SoundEventCached e (eagerSamples e)
-    eagerSamples  e = take (rate * ceiling (eventLength e) + 1) (samples e rate)
+    eagerSamples  e = takeNeededSamples e rate
 
 soundToSamples' :: [SoundEventCached] -> [SoundEventCached] -> SamplingRate -> Int -> [Sample]
 soundToSamples' []      []     _    _            = []
