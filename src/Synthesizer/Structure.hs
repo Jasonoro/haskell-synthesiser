@@ -8,6 +8,10 @@ module Synthesizer.Structure
   , SoundEvent (..)
   , SynSound (..)
   , Time
+  , addChannel
+  , addToNewChannel
+  , getAllEvents
+  , getAllEventsDuring
   , soundToSamples
   ) where
 
@@ -17,11 +21,11 @@ import Data.Ord
 
 newtype SynSound = SynSound {
   channels :: [Channel]
-} deriving (Show)
+} deriving (Show, Eq)
 
 newtype Channel = Channel {
   timeline :: [SoundEvent]
-} deriving (Show)
+} deriving (Show, Eq)
 
 type Time         = Double
 type Length       = Double
@@ -36,6 +40,16 @@ data SoundEvent = SoundEvent {
   samples     :: SamplingRate -> [Sample]
 }
 
+-- | Eq instance for SoundEvents. It should be noted that this isn't 100% sound, as if the needed samples for generating
+-- | sounds are exactly the same but a sample after that is different, this will return equality even if it really
+-- | isn't. However functionally these two events are the same, since at maximum that amount
+-- | of samples will be used when generating the sound from them. So there is no practical difference in this context
+instance Eq SoundEvent where
+  a == b = startTime a == startTime b &&
+           eventLength a == eventLength b &&
+           takeNeededSamples a rate == takeNeededSamples b rate
+    where rate = 100
+
 instance Show SoundEvent where
   show (SoundEvent startTime eventLength _) = "SoundEvent { startTime = " ++ show startTime ++ " eventLength = " ++ show eventLength ++ " samples = ... }"
 
@@ -44,16 +58,20 @@ data SoundEventCached = SoundEventCached {
   samplesCached :: [Sample]
 }
 
+-- | Takes the maximum needed samples to generate the sound. This is dependent on the sampling rate and the length of
+-- | the event.
+takeNeededSamples :: SoundEvent -> SamplingRate -> [Sample]
+takeNeededSamples e rate = take (rate * ceiling (eventLength e) + 1) (samples e rate)
+
 -- | Converts the sound structure to a list of samples with a certain sampling rate.
 -- | The worst-case time complexity of the algorithm is @O(n log n)@, where n is the amount of sound events.
 soundToSamples :: SynSound -> SamplingRate -> [Sample]
 soundToSamples sound rate = soundToSamples' convertedEvents [] rate 0
   where
-    flatEvents = concatMap timeline (channels sound)
-    sortedEvents = sortOn startTime flatEvents
+    sortedEvents = sortOn startTime (getAllEvents sound)
     convertedEvents = map eagerEvaluate sortedEvents
     eagerEvaluate e = SoundEventCached e (eagerSamples e)
-    eagerSamples  e = take (rate * ceiling (eventLength e) + 1) (samples e rate)
+    eagerSamples  e = takeNeededSamples e rate
 
 soundToSamples' :: [SoundEventCached] -> [SoundEventCached] -> SamplingRate -> Int -> [Sample]
 soundToSamples' []      []     _    _            = []
@@ -71,3 +89,24 @@ mergeTodoAndCurrent (todo, current) time = (newTodo, newCurrent)
         eventsFromTodo xs      = filter (\e -> time < startTime (event e) + eventLength (event e)) xs
         newTodo = drop (length $ eventsToCurrent todo) todo
         newCurrent = eventsFromTodo $ current ++ eventsToCurrent todo
+
+
+-- Multiple helper functions for easy adding/removing events
+
+-- | Adds a channel to a SynSound
+addChannel :: SynSound -> Channel -> SynSound
+addChannel s c = s {channels = c : channels s}
+
+-- | Adds SoundEvents to a new channel.
+addToNewChannel :: SynSound -> [SoundEvent] -> SynSound
+addToNewChannel s xs = addChannel s (Channel xs)
+
+-- | Gets all events currently in the synthesizer.
+getAllEvents :: SynSound -> [SoundEvent]
+getAllEvents s = concatMap timeline (channels s)
+
+-- | Gets all events that overlap with a time period of (startTime, endTime).
+-- | Passing an endTime that is before the startTime will result in no events being returned.
+getAllEventsDuring :: SynSound -> (Time, Time) -> [SoundEvent]
+getAllEventsDuring s (start, end) = filter (\e -> start < (startTime e + eventLength e) && startTime e < end) events
+  where events = getAllEvents s
