@@ -55,13 +55,16 @@ data Chord = Chord
 
 type StartTime = Double
 type Duration = Double
-data NoteEvent = NoteEvent StartTime Duration Note | ChordEvent StartTime Duration Chord
+type AmplitudeMult = Double
+data NoteEvent = NoteEvent StartTime Duration AmplitudeMult Note | ChordEvent StartTime Duration Chord
   deriving (Show)
 
 type BaseFrequency = Frequency
+type Amplitude = Double
+type BaseAmplitude = Amplitude
 type NoteStrike = Envelope
 noteStrike = Envelope
-data Instrument = Instrument BaseFrequency NoteStrike [NoteEvent]
+data Instrument = Instrument BaseFrequency BaseAmplitude NoteStrike [NoteEvent]
   deriving (Show)
 
 newtype MusicPiece = MusicPiece [Instrument]
