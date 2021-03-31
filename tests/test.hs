@@ -2,6 +2,7 @@ import Test.Tasty
 import Tests.Language
 import Tests.Notes
 import Tests.Notes.Default
+import Tests.Synthesizer.Modifiers.Envelopes
 import Tests.Synthesizer.Oscillator
 import Tests.Synthesizer.Structure
 
@@ -16,4 +17,5 @@ unitTestsTree = testGroup "UnitTests"
   , testGroup "Tests.Notes" notesTests
   , testGroup "Tests.Notes.Default" defaultNotesTests
   , testGroup "Tests.Synthesizer.Structure" synthesizerStructureTests
-  , testGroup "Tests.Synthesizer.Oscillator" oscillatorStructureTests ]
+  , testGroup "Tests.Synthesizer.Oscillator" oscillatorStructureTests
+  , testGroup "Tests.Synthesizer.Modifiers.Envelopes" envelopesTests]
