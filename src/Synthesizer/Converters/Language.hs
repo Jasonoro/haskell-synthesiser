@@ -1,4 +1,6 @@
-module Synthesizer.Converters.Language
+module Synthesizer.Converters.Language (
+  convertMusicPieceToSynthesizer
+  )
   where
 
 import Data.Map                        (Map, (!))

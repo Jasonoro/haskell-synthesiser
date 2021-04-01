@@ -15,9 +15,8 @@ module Synthesizer.Structure
   , soundToSamples
   ) where
 
-import Data.Foldable
-import Data.List
-import Data.Ord
+import Data.Foldable ( Foldable(foldr') )
+import Data.List ( sortOn )
 
 newtype SynSound = SynSound {
   channels :: [Channel]
