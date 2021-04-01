@@ -139,12 +139,6 @@ instance ShiftTone Note where
 instance ShiftTone [Note] where
   (#) notes toneShift = map (# toneShift) notes
 
-getNoteFrequency :: Note -> Frequency
-getNoteFrequency note = undefined
-
-getChordNotes :: Chord -> [Note]
-getChordNotes chord = undefined
-
 getOctaveFromInt :: Int -> Octave
 getOctaveFromInt = toEnum
 

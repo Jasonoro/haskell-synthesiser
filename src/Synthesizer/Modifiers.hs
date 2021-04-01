@@ -1,5 +1,6 @@
 module Synthesizer.Modifiers
-  where
+  ( applyAmplitude
+  ) where
 
 import Synthesizer.Structure (Sample)
 

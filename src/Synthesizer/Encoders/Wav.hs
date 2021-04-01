@@ -2,16 +2,15 @@ module Synthesizer.Encoders.Wav
   where
 
 import qualified Codec.Audio.Wave        as W
-import           Control.Exception
-import           Control.Monad.IO.Class
+import           Control.Exception       (catch, throwIO)
 import qualified Data.ByteString         as B
 import qualified Data.ByteString.Builder as B
-import           Data.Int
+import           Data.Int                (Int16)
 import           Prelude                 hiding (catch)
-import           Synthesizer.Structure
-import           System.Directory
-import           System.IO
-import           System.IO.Error         hiding (catch)
+import           Synthesizer.Structure   (Sample, SynSound, soundToSamples)
+import           System.Directory        (removeFile)
+import           System.IO               (Handle)
+import           System.IO.Error         (isDoesNotExistError)
 
 -- | The sampling rate of the WAV file
 samplingRate :: Num hz => hz

@@ -1,5 +1,6 @@
 module Synthesizer.Converters.Language
-  where
+  ( convertMusicPieceToSynthesizer
+  ) where
 
 import Data.Map                        (Map, (!))
 import Language                        (Amplitude, AmplitudeMult, BaseAmplitude,
