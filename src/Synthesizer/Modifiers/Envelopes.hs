@@ -1,8 +1,7 @@
 module Synthesizer.Modifiers.Envelopes
   where
 
-import Synthesizer.Structure
-    ( SoundEvent(SoundEvent), SamplingRate, Sample )
+import Synthesizer.Structure (Sample, SamplingRate, SoundEvent (SoundEvent))
 
 type Step          = Double
 type AttackLength  = Double

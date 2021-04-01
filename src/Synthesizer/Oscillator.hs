@@ -1,13 +1,12 @@
-module Synthesizer.Oscillator (
-  sawToothOscillator,
-  sineOscillator
-  )
-  where
+module Synthesizer.Oscillator
+  ( sawToothOscillator
+  , sineOscillator
+  ) where
 
-import Data.Fixed ( mod' )
-import Numeric ( Floating(pi, sin) )
+import Data.Fixed            (mod')
+import Numeric               (Floating (pi, sin))
 import Prelude               hiding (cycle)
-import Synthesizer.Structure ( SamplingRate, Frequency )
+import Synthesizer.Structure (Frequency, SamplingRate)
 
 type WaveFunction = Double -> Double
 

@@ -1,7 +1,6 @@
-module Notes (
-  generateNotes
-  )
-  where
+module Notes
+  ( generateNotes
+  ) where
 
 import Data.Map              (Map, fromList, (!))
 import Language              (Note (..), Pitch (..), Tone (..),
