@@ -2,8 +2,9 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Language.Chords
-  where
-
+  ( Chord (..)
+  , ChordType (..)
+  ) where
 
 import Language.Notes (Note)
 

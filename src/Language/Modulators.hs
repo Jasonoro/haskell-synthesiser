@@ -2,7 +2,9 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Language.Modulators
-  where
+  ( (#=)
+  , (^=)
+  ) where
 
 import Language.Notes (Note (Note, getOctave, getTone), Octave, Pitch (..),
                        Tone)

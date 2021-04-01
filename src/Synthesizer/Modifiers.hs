@@ -1,10 +1,11 @@
 module Synthesizer.Modifiers
-  where
+  ( applyAmplitude
+  ) where
 
 import Synthesizer.Structure (Sample)
 
 -- | Change the amplitude of a sample list
-amplitude :: Double     -- ^ The multiplier of the amplitude
-          -> [Double]   -- ^ The list of sampled points
-          -> [Double]
-amplitude amount = map (* amount)
+applyAmplitude :: Double     -- ^ The multiplier of the amplitude
+               -> [Double]   -- ^ The list of sampled points
+               -> [Double]
+applyAmplitude amount = map (* amount)

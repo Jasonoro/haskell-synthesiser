@@ -1,5 +1,6 @@
 module Language.MusicPiece
-  where
+  ( MusicPiece (..)
+  ) where
 
 import Language.Instrument (Instrument)
 

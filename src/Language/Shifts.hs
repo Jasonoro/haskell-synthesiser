@@ -2,7 +2,9 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Language.Shifts
-  where
+  ( (#)
+  , (^)
+  ) where
 
 import Language.Notes        (Note (getTone), Octave, Tone, getIntFromOctave,
                               getIntFromTone, getOctave, getOctaveFromInt,

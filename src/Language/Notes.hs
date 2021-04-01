@@ -2,10 +2,26 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Language.Notes
-  where
+  ( Note (..)
+  , Octave (..)
+  , Pitch (..)
+  , Tone (..)
+  , getIntFromOctave
+  , getIntFromTone
+  , getNoteFrequency
+  , getOctaveFromInt
+  , getToneFromInt
+  , noteStrike
+  , octaves
+  , pitches
+  , tones
+  ) where
 
-import Prelude               hiding ((^))
-import Synthesizer.Structure (Frequency)
+import Prelude                         hiding ((^))
+import Synthesizer.Modifiers.Envelopes (AttackLength, DecayLength,
+                                        Envelope (Envelope), ReleaseLength,
+                                        SustainLevel)
+import Synthesizer.Structure           (Frequency)
 
 data Tone = C | D | E | F | G | A | B
   deriving (Show, Enum, Ord, Eq)
@@ -31,6 +47,9 @@ data Note = Note
   , getOctave :: Octave
   }
   deriving (Show, Ord, Eq)
+
+noteStrike :: AttackLength -> DecayLength -> SustainLevel -> ReleaseLength -> Envelope
+noteStrike = Envelope
 
 getNoteFrequency :: Note -> Frequency
 getNoteFrequency note = undefined

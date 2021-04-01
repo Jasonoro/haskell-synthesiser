@@ -1,17 +1,21 @@
 module Synthesizer.Converters.Language
-  where
+  ( convertMusicPieceToSynthesizer
+  ) where
 
 import Data.Map                        (Map, (!))
-import Language.Instrument
+import Language.Instrument             (Amplitude, BaseAmplitude,
+                                        Instrument (..),
+                                        InstrumentEvent (NoteEvent))
 import Language.MusicPiece
 import Language.Notes
 import Notes                           (generateNotes)
-import Synthesizer.Modifiers           (amplitude)
+import Synthesizer.Modifiers           (applyAmplitude)
 import Synthesizer.Modifiers.Envelopes (Envelope (Envelope), applyEnvelope)
 import Synthesizer.Oscillator          (sineOscillator)
 import Synthesizer.Structure           (Channel (..), Frequency, Sample,
                                         SamplingRate, SoundEvent (..),
                                         SynSound (..))
+
 
 convertMusicPieceToSynthesizer :: MusicPiece -> SynSound
 convertMusicPieceToSynthesizer musicPiece = SynSound $ map convertInstrumentToChannel instruments
@@ -19,25 +23,24 @@ convertMusicPieceToSynthesizer musicPiece = SynSound $ map convertInstrumentToCh
     (MusicPiece instruments) = musicPiece
 
 convertInstrumentToChannel :: Instrument -> Channel
-convertInstrumentToChannel instrument = Channel $ map (convertInstrumentEventsToSoundEvents noteMap) instrumentEvents
+convertInstrumentToChannel instrument = Channel $ map (applyEnvelope noteStrike . convertNoteEventsToSoundEvents noteMap baseAmplitude) noteEvents
   where
-    (Instrument baseFreq instrumentEvents) = instrument
+    (Instrument baseFreq baseAmplitude noteStrike noteEvents) = instrument
     noteMap = generateNotes baseFreq
 
-convertInstrumentEventsToSoundEvents :: Map Note Frequency -> InstrumentEvent -> SoundEvent
-convertInstrumentEventsToSoundEvents noteMap noteEvent = applyEnvelope amplitudeEnvelope $ SoundEvent startTime duration samples
+convertNoteEventsToSoundEvents :: Map Note Frequency -> BaseAmplitude -> InstrumentEvent -> SoundEvent
+convertNoteEventsToSoundEvents noteMap baseAmplitude noteEvent = SoundEvent startTime duration samples
   where
-    (NoteEvent startTime duration note) = noteEvent
+    (NoteEvent startTime duration amplitudeMult note) = noteEvent
     samples :: SamplingRate -> [Sample]
-    samples samplingRate = convertFrequencyToSamples samplingRate noteFreq
+    samples samplingRate = convertFrequencyToSamples noteAmplitude samplingRate noteFreq
     noteFreq :: Frequency
     noteFreq = convertNoteToFrequency noteMap note
-    amplitudeEnvelope = Envelope 0.2 0.3 0.5 0.2
+    noteAmplitude :: Amplitude
+    noteAmplitude = baseAmplitude * amplitudeMult
 
 convertNoteToFrequency :: Map Note Frequency -> Note -> Frequency
 convertNoteToFrequency noteMap note = noteMap ! note
 
-convertFrequencyToSamples :: SamplingRate -> Frequency -> [Sample]
-convertFrequencyToSamples samplingRate freq = (amplitude amplitudeAmount . sineOscillator freq) samplingRate
-  where
-    amplitudeAmount = 32767
+convertFrequencyToSamples :: Amplitude -> SamplingRate -> Frequency -> [Sample]
+convertFrequencyToSamples amplitude samplingRate freq = (applyAmplitude amplitude . sineOscillator freq) samplingRate
