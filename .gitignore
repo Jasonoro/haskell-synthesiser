@@ -24,3 +24,4 @@ cabal.project.local~
 .vscode
 .DS_Store
 *.wav
+doc

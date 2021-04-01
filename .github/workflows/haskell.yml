@@ -8,10 +8,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: haskell/actions/setup@v1
         with:
-          ghc-version: '8.8.3' # Exact version of ghc to use
+          ghc-version: "8.8.3" # Exact version of ghc to use
           # cabal-version: 'latest'. Omitted, but defaults to 'latest'
           enable-stack: true
-          stack-version: 'latest'
+          stack-version: "latest"
       - name: Cache
         uses: actions/cache@v1
         env:
@@ -28,10 +28,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: haskell/actions/setup@v1
         with:
-          ghc-version: '8.8.3' # Exact version of ghc to use
+          ghc-version: "8.8.3" # Exact version of ghc to use
           # cabal-version: 'latest'. Omitted, but defaults to 'latest'
           enable-stack: true
-          stack-version: 'latest'
+          stack-version: "latest"
       - name: Cache
         uses: actions/cache@v1
         env:
@@ -48,10 +48,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: haskell/actions/setup@v1
         with:
-          ghc-version: '8.8.3' # Exact version of ghc to use
+          ghc-version: "8.8.3" # Exact version of ghc to use
           # cabal-version: 'latest'. Omitted, but defaults to 'latest'
           enable-stack: true
-          stack-version: 'latest'
+          stack-version: "latest"
       - name: Cache
         uses: actions/cache@v1
         env:
@@ -77,10 +77,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: haskell/actions/setup@v1
         with:
-          ghc-version: '8.8.3' # Exact version of ghc to use
+          ghc-version: "8.8.3" # Exact version of ghc to use
           # cabal-version: 'latest'. Omitted, but defaults to 'latest'
           enable-stack: true
-          stack-version: 'latest'
+          stack-version: "latest"
       - name: Cache
         uses: actions/cache@v1
         env:
@@ -88,13 +88,13 @@ jobs:
         with:
           path: ~/.stack
           key: ${{ runner.os }}-build-${{ env.cache-name }}
-      - run: stack build --haddock --no-haddock-deps --haddock-arguments "--odir ${PWD}/doc" haskell-synthesizer
+      - run: stack haddock
       - name: Push docs
         uses: cpina/github-action-push-to-another-repository@master
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_DOC_REPO_GITHUB }}
         with:
-          source-directory: 'doc'
-          destination-github-username: 'jasonoro'
-          destination-repository-name: 'haskell-synthesizer-docs'
-          user-email: 'actions@github.com'
+          source-directory: "doc"
+          destination-github-username: "jasonoro"
+          destination-repository-name: "haskell-synthesizer-docs"
+          user-email: "actions@github.com"
