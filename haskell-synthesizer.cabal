@@ -39,6 +39,7 @@ library
       Synthesizer.Converters.Language
       Synthesizer.Encoders.Wav
       Synthesizer.Modifiers
+      Synthesizer.Modifiers.Ceiling
       Synthesizer.Modifiers.Envelopes
       Synthesizer.Oscillator
       Synthesizer.Structure
@@ -77,6 +78,7 @@ test-suite haskell-synthesizer-test
       Tests.Language
       Tests.Notes
       Tests.Notes.Default
+      Tests.Synthesizer.Modifiers.Ceiling
       Tests.Synthesizer.Modifiers.Envelopes
       Tests.Synthesizer.Oscillator
       Tests.Synthesizer.Structure
