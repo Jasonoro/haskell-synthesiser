@@ -8,7 +8,10 @@ import Synthesizer.Modifiers.Envelopes
 import Synthesizer.Oscillator
 import Synthesizer.Structure
 
-import Language
+import Language.Instrument
+import Language.Modulators
+import Language.MusicPiece
+import Language.Notes
 import Notes.Default
 import Synthesizer.Converters.Language (convertMusicPieceToSynthesizer)
 

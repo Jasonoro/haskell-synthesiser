@@ -2,8 +2,9 @@ module Synthesizer.Converters.Language
   where
 
 import Data.Map                        (Map, (!))
-import Language                        (Instrument (..), MusicPiece (..), Note,
-                                        NoteEvent (NoteEvent))
+import Language.Instrument
+import Language.MusicPiece
+import Language.Notes
 import Notes                           (generateNotes)
 import Synthesizer.Modifiers           (amplitude)
 import Synthesizer.Modifiers.Envelopes (Envelope (Envelope), applyEnvelope)
@@ -18,13 +19,13 @@ convertMusicPieceToSynthesizer musicPiece = SynSound $ map convertInstrumentToCh
     (MusicPiece instruments) = musicPiece
 
 convertInstrumentToChannel :: Instrument -> Channel
-convertInstrumentToChannel instrument = Channel $ map (convertNoteEventsToSoundEvents noteMap) noteEvents
+convertInstrumentToChannel instrument = Channel $ map (convertInstrumentEventsToSoundEvents noteMap) instrumentEvents
   where
-    (Instrument baseFreq noteEvents) = instrument
+    (Instrument baseFreq instrumentEvents) = instrument
     noteMap = generateNotes baseFreq
 
-convertNoteEventsToSoundEvents :: Map Note Frequency -> NoteEvent -> SoundEvent
-convertNoteEventsToSoundEvents noteMap noteEvent = applyEnvelope amplitudeEnvelope $ SoundEvent startTime duration samples
+convertInstrumentEventsToSoundEvents :: Map Note Frequency -> InstrumentEvent -> SoundEvent
+convertInstrumentEventsToSoundEvents noteMap noteEvent = applyEnvelope amplitudeEnvelope $ SoundEvent startTime duration samples
   where
     (NoteEvent startTime duration note) = noteEvent
     samples :: SamplingRate -> [Sample]

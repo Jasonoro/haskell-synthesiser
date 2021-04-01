@@ -1,9 +1,10 @@
 module Notes.Default
   where
 
-import Data.Map (Map, (!))
-import Language (Note, Octave (..), Tone (..), (^=))
-import Notes    (generateNotes)
+import Data.Map            (Map, (!))
+import Language.Modulators
+import Language.Notes
+import Notes               (generateNotes)
 
 -- Notes
 
