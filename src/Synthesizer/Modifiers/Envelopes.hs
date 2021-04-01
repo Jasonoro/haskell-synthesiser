@@ -14,7 +14,7 @@ type TotalLength   = Length
 data Envelope = Envelope {
     attackLength  :: AttackLength, -- ^ The time it takes a note to rise to its highest volume (in seconds)
     decayLength   :: DecayLength,  -- ^ The time it takes a note to falls to the sustain level (in seconds)
-    sustainLevel  :: SustainLevel, -- ^ The percentage of the maximum volume which the decay length will fall to (a percentage)
+    sustainLevel  :: SustainLevel, -- ^ The percentage of the maximum volume which the decay length will fall to (between 0 and 1)
     releaseLength :: ReleaseLength -- ^ The time it takes a note to completely fall from the sustain level to silent (in seconds)
 } deriving (Show)
 
@@ -46,52 +46,47 @@ applyEnvelope envelope soundEvent = SoundEvent startTime newEventLength newSampl
 
                 -- Calculate the attack steps based on attack length
                 ad :: [Step] -- [0.0, ..., 1.0]
-                ad = getAttackSteps attackLength samplingRate
+                ad = getAttackSteps attackLength sr
 
                 -- Calculate the decay steps based on decay length
                 dd :: [Step] -- [1.0, .., sustainLevel]
-                dd = getDecaySteps decayLength sustainLevel samplingRate
+                dd = getDecaySteps decayLength sustainLevel sr
 
                 -- Calculate the sustain steps based on sustain level
                 sd :: [Step] --  [sustainLevel]
-                sd = getSustainSteps sustainLevel eventLength attackLength decayLength samplingRate
+                sd = getSustainSteps sustainLevel eventLength attackLength decayLength sr
 
                 -- TODO: the release stepper could start above the sustain level if attack and decay are longer than the eventLength
                 -- Calculate the release steps based on release length
                 rd :: [Step] -- [sustainLevel, ..., 0.0]
-                rd = getReleaseSteps sustainLevel releaseLength samplingRate
+                rd = getReleaseSteps sustainLevel releaseLength sr
 
 
+type SamplingRateConverted = Double
 
 -- | Calculate the attack steps based on attack length
-getAttackSteps :: AttackLength -> SamplingRate -> [Step]
+getAttackSteps :: AttackLength -> SamplingRateConverted -> [Step]
 getAttackSteps attackLength samplingRate = [0.0, step .. 1.0]
   where
-    step = 1.0 / (attackLength * sr)
-    sr = fromIntegral samplingRate
+    step = 1.0 / (attackLength * samplingRate)
 
 -- | Calculate the decay steps based on decay length
-getDecaySteps :: DecayLength -> SustainLevel -> SamplingRate -> [Step]
+getDecaySteps :: DecayLength -> SustainLevel -> SamplingRateConverted -> [Step]
 getDecaySteps 0 sustainLevel samplingRate = []
 -- special case where sustain level would never decrease and steps would be infinite
-getDecaySteps decayLength 1 samplingRate = replicate (round (decayLength * sr)) 1
-  where
-    sr = fromIntegral samplingRate
+getDecaySteps decayLength 1 samplingRate = replicate (round (decayLength * samplingRate)) 1
 getDecaySteps decayLength sustainLevel samplingRate = tail [1.0, (1.0 - step) .. sustainLevel]
   where
-    step = (1.0 - sustainLevel) / (decayLength * sr)
-    sr = fromIntegral samplingRate
+    step = (1.0 - sustainLevel) / (decayLength * samplingRate)
 
 -- | Calculate the sustain steps based on sustain level
-getSustainSteps :: SustainLevel -> TotalLength -> AttackLength -> DecayLength -> SamplingRate -> [Step]
-getSustainSteps sustainLevel eventLength attackLength decayLength samplingRate = replicate (round (sustainLength * sr)) sustainLevel
+getSustainSteps :: SustainLevel -> TotalLength -> AttackLength -> DecayLength -> SamplingRateConverted -> [Step]
+getSustainSteps sustainLevel eventLength attackLength decayLength samplingRate = replicate (round (sustainLength * samplingRate)) sustainLevel
   where
-    sr = fromIntegral samplingRate
     sustainLength = eventLength - attackLength - decayLength
 
-getReleaseSteps :: SustainLevel -> ReleaseLength -> SamplingRate -> [Step]
+getReleaseSteps :: SustainLevel -> ReleaseLength -> SamplingRateConverted -> [Step]
 getReleaseSteps sustainLevel 0 samplingRate = []
 getReleaseSteps sustainLevel releaseLength samplingRate  = tail [sustainLevel, (sustainLevel - step) .. 0.0]
   where
-    sr = fromIntegral samplingRate
-    step = 1 / (releaseLength * sr) * sustainLevel
+    step = 1 / (releaseLength * samplingRate) * sustainLevel
