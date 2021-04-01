@@ -51,9 +51,6 @@ data Note = Note
 noteStrike :: AttackLength -> DecayLength -> SustainLevel -> ReleaseLength -> Envelope
 noteStrike = Envelope
 
-getNoteFrequency :: Note -> Frequency
-getNoteFrequency note = undefined
-
 getOctaveFromInt :: Int -> Octave
 getOctaveFromInt = toEnum
 
