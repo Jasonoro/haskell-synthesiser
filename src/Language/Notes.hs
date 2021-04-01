@@ -8,7 +8,6 @@ module Language.Notes
   , Tone (..)
   , getIntFromOctave
   , getIntFromTone
-  , getNoteFrequency
   , getOctaveFromInt
   , getToneFromInt
   , noteStrike
