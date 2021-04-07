@@ -3,7 +3,8 @@ module Tests.Notes where
 import Test.Tasty.HUnit
 import Notes
 import Data.Map ((!))
-import Language (Tone(..), Octave(..), (^=))
+import Language.Notes (Tone(..), Octave(..))
+import Language.Modulators ((^=))
 
 notesTests =
   [ testNumberOfScaleNotes

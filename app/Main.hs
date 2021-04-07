@@ -1,10 +1,18 @@
 module Main
   where
 
-import Language
+import Data.Map                        ((!))
+import Language.Instrument             (Amplitude, Instrument (Instrument),
+                                        InstrumentEvent (NoteEvent))
+import Language.Modulators
+import Language.MusicPiece
+import Language.Notes
 import Notes.Default
 import Synthesizer.Converters.Language (convertMusicPieceToSynthesizer)
 import Synthesizer.Encoders.Wav
+import Synthesizer.Modifiers           (applyAmplitude)
+import Synthesizer.Modifiers.Envelopes
+import Synthesizer.Oscillator
 import Synthesizer.Structure
 
 defaultVolume :: Amplitude

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 43d2b08e5aef001cf0f8e290ab5eb067ca87df6828e6961f3a97a418d26ae22f
+-- hash: 41e29f28682cda24d2d92b1135d0545cce58380c4fa304257f4225aa6e4cb950
 
 name:           haskell-synthesizer
 version:        0.1.0.0
@@ -27,7 +27,12 @@ source-repository head
 
 library
   exposed-modules:
-      Language
+      Language.Chords
+      Language.Instrument
+      Language.Modulators
+      Language.MusicPiece
+      Language.Notes
+      Language.Shifts
       Notes
       Notes.Default
       Synthesizer

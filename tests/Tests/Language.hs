@@ -1,7 +1,9 @@
 module Tests.Language
   where
 
-import Language
+import Language.Notes
+import Language.Shifts
+import Language.Modulators
 import Prelude          hiding ((^))
 import Test.Tasty.HUnit
 

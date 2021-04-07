@@ -2,7 +2,7 @@ module Notes
   where
 
 import Data.Map              (Map, fromList, (!))
-import Language              (Note (..), Pitch (..), Tone (..),
+import Language.Notes        (Note (..), Pitch (..), Tone (..),
                               getOctaveFromInt, octaves)
 import Synthesizer.Structure (Frequency)
 
