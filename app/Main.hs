@@ -32,7 +32,13 @@ musicPiece = MusicPiece [
       NoteEvent (noteOffset 0 0)   longDuration 0.2 (C ^= Two),
 
       NoteEvent (noteOffset 12 4)  longDuration 0.2 (B ^= Three),
-      NoteEvent (noteOffset 12 4)  longDuration 0.2 (B ^= Two)
+      NoteEvent (noteOffset 12 4)  longDuration 0.2 (B ^= Two),
+
+      NoteEvent (noteOffset 24 8)  longDuration 0.2 (A ^= Three),
+      NoteEvent (noteOffset 24 8)  longDuration 0.2 (A ^= Two),
+
+      NoteEvent (noteOffset 28 8)  longDuration 0.2 (F ^= Two),
+      NoteEvent (noteOffset 28 8)  longDuration 0.2 (F ^= One)
     ],
 
     Instrument 440 defaultVolume (noteStrike 0.05 0.1 1 0.05) [
@@ -69,7 +75,24 @@ musicPiece = MusicPiece [
 
       NoteEvent (noteOffset 21 7)  defaultDuration volume         (G ^= Three),
       NoteEvent (noteOffset 22 7)  defaultDuration (volume * 0.8) (C ^= Four),
-      NoteEvent (noteOffset 23 7)  defaultDuration (volume * 0.7) (E ^= Four)
+      NoteEvent (noteOffset 23 7)  defaultDuration (volume * 0.7) (E ^= Four),
+
+      -- third four
+      NoteEvent (noteOffset 24 8)  defaultDuration volume         (A ^= Three),
+      NoteEvent (noteOffset 25 8)  defaultDuration (volume * 0.8) (C ^= Four),
+      NoteEvent (noteOffset 26 8)  defaultDuration (volume * 0.7) (E ^= Four),
+
+      NoteEvent (noteOffset 27 9)  defaultDuration volume         (A ^= Three),
+      NoteEvent (noteOffset 28 9)  defaultDuration (volume * 0.8) (C ^= Four),
+      NoteEvent (noteOffset 29 9)  defaultDuration (volume * 0.7) (E ^= Four),
+
+      NoteEvent (noteOffset 30 10)  defaultDuration volume         (A ^= Three),
+      NoteEvent (noteOffset 31 10)  defaultDuration (volume * 0.8) (D ^= Four),
+      NoteEvent (noteOffset 32 10)  defaultDuration (volume * 0.7) (F ^= Four),
+
+      NoteEvent (noteOffset 33 11)  defaultDuration volume         (A ^= Three),
+      NoteEvent (noteOffset 34 11)  defaultDuration (volume * 0.8) (D ^= Four),
+      NoteEvent (noteOffset 35 11)  defaultDuration (volume * 0.7) (F ^= Four)
 
     ]
   ]
