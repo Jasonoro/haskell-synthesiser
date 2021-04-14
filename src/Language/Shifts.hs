@@ -31,8 +31,7 @@ class ShiftTone a where
   (#) :: a -> ToneShift -> a
 
 instance ShiftTone Note where
-  (#) note toneShift = trace (show octaveShift) $ trace (show tonesTillNextOctave) $ trace (show newTone) $
-    note { getTone = getToneFromInt newTone } ^ octaveShift
+  (#) note toneShift = note { getTone = getToneFromInt newTone } ^ octaveShift
     where
       previousTone = getIntFromTone (getTone note)
       tonesTotal = length tones
