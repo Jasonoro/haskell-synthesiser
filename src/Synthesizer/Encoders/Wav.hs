@@ -47,7 +47,6 @@ saveSignal filename sound = do
   let wavfile = filename <> ".wav"
   writeWaveFile wavfile wave $ \handle -> B.hPutBuilder handle (mconcat $ B.int16LE <$> map sampleToI16 samples)
 
--- TODO: Don't we want to throw an error?
 -- | Convert a sample to an Int16, as that is the biggest amplitude WAV supports
 sampleToI16 :: Sample -> Int16
 sampleToI16 s | s > 32767 = 32767
