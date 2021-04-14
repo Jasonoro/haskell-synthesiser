@@ -1,10 +1,11 @@
-module Tests.Notes where
+module Tests.Notes
+  where
 
-import Test.Tasty.HUnit
-import Notes
-import Data.Map ((!))
-import Language.Notes (Tone(..), Octave(..))
+import Data.Map            ((!))
 import Language.Modulators ((^=))
+import Language.Notes      (Octave (..), Tone (..))
+import Notes
+import Test.Tasty.HUnit
 
 notesTests =
   [ testNumberOfScaleNotes
