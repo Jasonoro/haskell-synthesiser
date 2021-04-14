@@ -23,14 +23,14 @@ convertMusicPieceToSynthesizer musicPiece = SynSound $ map convertInstrumentToCh
   where
     (MusicPiece instruments) = musicPiece
 
--- | Converts an instrument block in the DSL to a Synthesizer channel.
+-- | Converts an 'Instrument' with corresponding 'NoteEvent's in the DSL to a Synthesizer channel.
 convertInstrumentToChannel :: Instrument -> Channel
 convertInstrumentToChannel instrument = Channel $ map (applyEnvelope noteStrike . convertNoteEventsToSoundEvents noteMap baseAmplitude) noteEvents
   where
     (Instrument baseFreq baseAmplitude noteStrike noteEvents) = instrument
     noteMap = generateNotes baseFreq
 
--- | Convert a single (possibly modified by envelope) note event to a SoundEvent.
+-- | Convert a single (possibly modified by envelope) 'InstrumentEvent' to a SoundEvent.
 convertNoteEventsToSoundEvents :: Map Note Frequency -> BaseAmplitude -> InstrumentEvent -> SoundEvent
 convertNoteEventsToSoundEvents noteMap baseAmplitude noteEvent = SoundEvent startTime duration samples
   where
