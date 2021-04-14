@@ -1,5 +1,6 @@
-{-# LANGUAGE FlexibleInstances     #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleInstances      #-}
+{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE TypeFamilies           #-}
 
 module Language.Modulators
   ( (#=)
@@ -9,7 +10,7 @@ module Language.Modulators
 import Language.Notes (Note (Note, getOctave, getTone), Octave, Pitch (..),
                        Tone)
 
-class ModulateOctave a b where
+class ModulateOctave a b | a -> b where
   (^=) :: a -> Octave -> b
 
 instance ModulateOctave Note Note where

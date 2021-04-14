@@ -23,7 +23,7 @@ languageTests =
     testCase "Shift Octave - Multiple"    $ testNotes ^ 5                       @?= [Note D Flat Six, Note D Flat Six, Note D Flat Six],
     -- Modulate octaves
     testCase "Modulate Octave"            $ testNote ^= Zero                    @?= Note D Flat Zero,
-    testCase "Modulate Octave - Combine"  $ (testNote ^= Zero :: Note) ^= Six   @?= Note D Flat Six,
+    testCase "Modulate Octave - Combine"  $ (testNote ^= Zero) ^= Six           @?= Note D Flat Six,
     testCase "Modulate Octave - Multiple" $ testNotes ^= Six                    @?= [Note D Flat Six, Note D Flat Six, Note D Flat Six],
     -- Shift tones
     testCase "Shift Tone - Positive"      $ testNote # 1                        @?= Note E Flat One,
@@ -36,5 +36,5 @@ languageTests =
     testCase "Modulate Tone - Multiple"   $ testNotes #= A                      @?= [Note A Flat One, Note A Flat One, Note A Flat One],
     -- Combinding
     testCase "Combining shift and modulations"
-    $ ((testNote #= B :: Note) ^= Zero :: Note) ^ 8                             @?= Note B Flat Eight
+    $ ((testNote #= B) ^= Zero) ^ 8                                             @?= Note B Flat Eight
   ]
