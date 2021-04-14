@@ -1,4 +1,4 @@
-# Haskell-Synthesizer: A user-friendly synthesizer in natrive haskell
+# Haskell-Synthesizer: A user-friendly synthesizer in native Haskell
 
 Haskell-Synthesizer is a Haskell native synthesizer designed for simplicity.
 It provides an easy-to-extend API for the synthesizer, and a high-level DSL for making music.
@@ -13,6 +13,9 @@ Here is the link to the Haddock documentation: [Haskell Synthesizer Documentatio
 3. `stack install haskell-synthesizer`
 
 ## Example
+
+See the [source code](https://jasonoro.github.io/haskell-synthesizer-docs/src/Examples.html) of the `Examples` module for more examples. 
+
 
 ```haskell
 module Main
@@ -43,7 +46,7 @@ musicPiece = MusicPiece [
       NoteEvent 3.5 0.5 1 (C ^= Four),
 
       NoteEvent 4   0.5 1.3 (E ^= Four),
-      NoteEvent 4.5 0.5 1 (F ^= Four),
+      NoteEvent 4.5 0.5 1   (F ^= Four),
       NoteEvent 5   0.5 1.3 (G ^= Four)
     ]
   ]
