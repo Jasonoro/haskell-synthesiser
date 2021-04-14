@@ -3,6 +3,9 @@
 Haskell-Synthesizer is a Haskell native synthesizer designed for simplicity.
 It provides an easy-to-extend API for the synthesizer, and a high-level DSL for making music.
 
+### Documentation
+Here is the link to the Haddock documentation: [Haskell Synthesizer Documentation](https://jasonoro.github.io/haskell-synthesizer-docs)
+
 ## Installation instructions
 
 1. Clone the repo
