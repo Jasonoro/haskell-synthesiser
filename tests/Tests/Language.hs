@@ -1,10 +1,10 @@
 module Tests.Language
   where
 
+import Language.Modulators
 import Language.Notes
 import Language.Shifts
-import Language.Modulators
-import Prelude          hiding ((^))
+import Prelude             hiding ((^))
 import Test.Tasty.HUnit
 
 testNote = Note D Flat One
@@ -30,6 +30,8 @@ languageTests =
     testCase "Shift Tone - Negative"      $ testNote # (-1)                     @?= Note C Flat One,
     testCase "Shift Tone - Combine"       $ testNote # (-1) # 1                 @?= testNote,
     testCase "Shift Tone - Multiple"      $ testNotes # 1                       @?= [Note E Flat One, Note E Flat One, Note E Flat One],
+    testCase "Shift Tone - Octave"        $ testNote # 7                        @?= Note D Flat Two,
+    testCase "Shift Tone - Octave & Note" $ testNote # 8                        @?= Note E Flat Two,
     -- Modulate tones
     testCase "Modulate Tone"              $ testNote #= B                       @?= Note B Flat One,
     testCase "Modulate Tone - Combine"    $ testNote #= B #= A                  @?= Note A Flat One,
