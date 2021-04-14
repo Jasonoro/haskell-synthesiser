@@ -22,9 +22,21 @@ newtype SynSound = SynSound {
   channels :: [Channel]
 } deriving (Show, Eq)
 
+instance Semigroup SynSound where
+  a <> b = foldl addChannel a (channels b)
+
+instance Monoid SynSound where
+  mempty = SynSound []
+
 newtype Channel = Channel {
   timeline :: [SoundEvent]
 } deriving (Show, Eq)
+
+instance Semigroup Channel where
+  a <> b = Channel (timeline a ++ timeline b)
+
+instance Monoid Channel where
+  mempty = Channel []
 
 type Time         = Double
 type Length       = Double
