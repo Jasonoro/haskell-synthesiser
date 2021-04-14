@@ -85,6 +85,7 @@ getSustainSteps sustainLevel eventLength attackLength decayLength samplingRate =
   where
     sustainLength = eventLength - attackLength - decayLength
 
+-- | Calculate the sustain steps based on the release length and the sustain level
 getReleaseSteps :: SustainLevel -> ReleaseLength -> SamplingRateConverted -> [Step]
 getReleaseSteps sustainLevel 0 samplingRate = []
 getReleaseSteps sustainLevel releaseLength samplingRate  = tail [sustainLevel, (sustainLevel - step) .. 0.0]

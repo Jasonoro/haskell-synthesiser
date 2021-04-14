@@ -17,6 +17,7 @@ module Synthesizer.Structure
 
 import Data.Foldable (Foldable (foldr'))
 import Data.List     (sortOn)
+import Data.Monoid
 
 newtype SynSound = SynSound {
   channels :: [Channel]
@@ -40,9 +41,9 @@ data SoundEvent = SoundEvent {
 }
 
 -- | Eq instance for SoundEvents. It should be noted that this isn't 100% sound, as if the needed samples for generating
--- | sounds are exactly the same but a sample after that is different, this will return equality even if it really
--- | isn't. However functionally these two events are the same, since at maximum that amount
--- | of samples will be used when generating the sound from them. So there is no practical difference in this context
+-- sounds are exactly the same but a sample after that is different, this will return equality even if it really
+-- isn't. However functionally these two events are the same, since at maximum that amount
+-- of samples will be used when generating the sound from them. So there is no practical difference in this context
 instance Eq SoundEvent where
   a == b = startTime a == startTime b &&
            eventLength a == eventLength b &&
@@ -58,12 +59,12 @@ data SoundEventCached = SoundEventCached {
 }
 
 -- | Takes the maximum needed samples to generate the sound. This is dependent on the sampling rate and the length of
--- | the event.
+-- the event.
 takeNeededSamples :: SoundEvent -> SamplingRate -> [Sample]
 takeNeededSamples e rate = take (rate * ceiling (eventLength e) + 1) (samples e rate)
 
 -- | Converts the sound structure to a list of samples with a certain sampling rate.
--- | The worst-case time complexity of the algorithm is @O(n log n)@, where n is the amount of sound events.
+-- The worst-case time complexity of the algorithm is @O(n log n)@, where n is the amount of sound events.
 soundToSamples :: SynSound -> SamplingRate -> [Sample]
 soundToSamples sound rate = soundToSamples' convertedEvents [] rate 0
   where
