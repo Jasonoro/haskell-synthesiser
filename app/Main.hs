@@ -2,8 +2,9 @@ module Main
   where
 
 import Data.Map                        ((!))
+import Language.Chords                 (Chord (Chord), ChordType (Major))
 import Language.Instrument             (Amplitude, Instrument (Instrument),
-                                        InstrumentEvent (NoteEvent))
+                                        InstrumentEvent (ChordEvent, NoteEvent))
 import Language.Modulators
 import Language.MusicPiece
 import Language.Notes
@@ -97,6 +98,7 @@ musicPiece = MusicPiece [
     ]
   ]
     where
+      chordNote  = C ^= Four
       noteOffset offsetAmount pauzeAmount = offset * offsetAmount + pauze * pauzeAmount
 
 

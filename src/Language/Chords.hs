@@ -4,9 +4,11 @@
 module Language.Chords
   ( Chord (..)
   , ChordType (..)
+  , getChordNotes
   ) where
 
-import Language.Notes (Note)
+import Language.Notes  (Note)
+import Language.Shifts ((#))
 
 data ChordType =
   Major
@@ -29,4 +31,4 @@ data Chord = Chord
   deriving (Show)
 
 getChordNotes :: Chord -> [Note]
-getChordNotes chord = undefined
+getChordNotes (Chord Major baseNote) = [baseNote, baseNote # 2, baseNote # 4]

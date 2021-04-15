@@ -6,9 +6,10 @@ module Language.Shifts
   , (^)
   ) where
 
+import Debug.Trace           (trace)
 import Language.Notes        (Note (getTone), Octave, Tone, getIntFromOctave,
                               getIntFromTone, getOctave, getOctaveFromInt,
-                              getToneFromInt)
+                              getToneFromInt, tones)
 import Prelude               hiding ((^))
 import Synthesizer.Structure (Frequency)
 
@@ -30,9 +31,14 @@ class ShiftTone a where
   (#) :: a -> ToneShift -> a
 
 instance ShiftTone Note where
-  (#) note toneShift = note { getTone = newTone }
+  (#) note toneShift = note { getTone = getToneFromInt newTone } ^ octaveShift
     where
-      newTone = getToneFromInt $ getIntFromTone (getTone note) + toneShift
+      previousTone = getIntFromTone (getTone note)
+      tonesTotal = length tones
+      tonesTillNextOctave = tonesTotal - previousTone
+
+      octaveShift = (previousTone + toneShift) `div` tonesTotal
+      newTone = (previousTone + toneShift) `mod` tonesTotal
 
 instance ShiftTone [Note] where
   (#) notes toneShift = map (# toneShift) notes
